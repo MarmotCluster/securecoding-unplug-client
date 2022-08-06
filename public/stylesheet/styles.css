@@ -1,0 +1,21 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+  font-family: "NanumSquareRound", sans-serif;
+}
+
+html,
+body {
+  font-size: 62.5%;
+}
+
+.fonts {
+  font-family: "Poppins", sans-serif;
+  font-family: "Quicksand", sans-serif;
+  font-family: "Roboto", sans-serif;
+  font-family: "NanumSquareRound", sans-serif;
+}

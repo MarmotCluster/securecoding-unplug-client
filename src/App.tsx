@@ -1,26 +1,21 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import CounterContainer from './components/containers/CounterContainer';
+import DisplayRange from './components/containers/DisplayRange';
+import Login from './components/pages/Login';
+import Main from './components/pages/Main';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    return (
+        <BrowserRouter>
+            <DisplayRange>
+                <Routes>
+                    <Route path="/" element={<Main />} />
+                    <Route path="/counter" element={<CounterContainer />} />
+                </Routes>
+            </DisplayRange>
+        </BrowserRouter>
+    );
+};
 
 export default App;
