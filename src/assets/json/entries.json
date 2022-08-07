@@ -1,0 +1,31 @@
+{
+    "login": [
+        {
+            "type": "text",
+            "name": "username",
+            "onInvalid": "enter at least 8 characters."
+        },
+        {
+            "type": "password",
+            "name": "password",
+            "onInvalid": "enter at least 8 letters including a letter and a number."
+        }
+    ],
+    "register": [
+        {
+            "type": "email",
+            "name": "email",
+            "onInvalid": "invalid type of email"
+        },
+        {
+            "type": "text",
+            "name": "username",
+            "onInvalid": "enter at least 8 characters."
+        },
+        {
+            "type": "password",
+            "name": "password",
+            "onInvalid": "enter at least 8 letters including a letter and a number."
+        }
+    ]
+}

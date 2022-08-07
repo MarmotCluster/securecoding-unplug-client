@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { validate } from '../../utils';
 import Logo from '../Logo';
+import RoundyInput from '../RoundyInput';
+import entries from '../../assets/json/entries.json';
 
 type TypeLogin = {
     username: string;
@@ -23,6 +25,8 @@ type ValidateList = {
 };
 
 const Entries = () => {
+    const [currentPage, setCurrentPage] = useState<'login' | 'register'>('login');
+
     const [loginValids, setLoginValids] = useState<ValidateList>({
         username: true,
         password: true,
@@ -32,6 +36,24 @@ const Entries = () => {
         username: '',
         password: '',
     });
+
+    const [registerValids, setRegisterValids] = useState<ValidateList>({
+        email: true,
+        username: true,
+        password: true,
+        cfmpassword: true,
+    });
+
+    const [registerForm, setRegisterForm] = useState<FormData>({
+        email: '',
+        username: '',
+        password: '',
+        cfmpassword: '',
+    });
+
+    // useEffect(() => {
+    //     console.log(loginValids);
+    // }, [loginValids]);
 
     return (
         <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
@@ -63,39 +85,55 @@ const Entries = () => {
                 </p>
             </section>
             <section id="plate-inputs">
-                <div style={{ position: 'relative' }}>
-                    <input
-                        className="common text en-pri wei-300"
-                        type="text"
-                        name="username"
-                        placeholder=" "
-                        value={loginForm.username}
-                        onChange={(e) => setLoginForm((state) => ({ ...state, [e.target.name]: e.target.value }))}
-                        autoComplete="off"
-                        style={{ borderColor: !loginValids.username ? '#e09d9d' : undefined }}
-                    />
-                    <div className={`dynamic-placeholder${!loginValids.username ? '-invalid' : ''} nodrag`}>
-                        username
-                    </div>
-                </div>
-                <div style={{ height: '1.5rem' }}></div>
-                <div style={{ position: 'relative' }}>
-                    <input
-                        className="common text en-pri wei-300"
-                        type="password"
-                        name="password"
-                        placeholder=" "
-                        value={loginForm.password}
-                        onChange={(e) => setLoginForm((state) => ({ ...state, [e.target.name]: e.target.value }))}
-                        autoComplete="new-password"
-                        style={{ borderColor: !loginValids.password ? '#e09d9d' : undefined }}
-                    />
-                    <div className={`dynamic-placeholder${!loginValids.password ? '-invalid' : ''} nodrag`}>
-                        password
-                    </div>
-                </div>
+                {entries[currentPage].map(({ type, name, onInvalid }, index) => {
+                    return (
+                        <>
+                            <RoundyInput
+                                type={type as 'password' | 'email' | 'text'}
+                                name={name}
+                                value={currentPage === 'login' ? Object(loginForm)[name] : Object(registerForm)[name]}
+                                onChange={(e) => {
+                                    const target = e.target as HTMLInputElement;
+                                    currentPage === 'login'
+                                        ? setLoginForm((state) => ({ ...state, [target.name]: target.value }))
+                                        : setRegisterForm((state) => ({ ...state, [target.name]: target.value }));
+                                }}
+                                style={{
+                                    borderColor:
+                                        currentPage === 'login'
+                                            ? !Object(loginValids)[name]
+                                                ? '#e09d9d'
+                                                : undefined
+                                            : !Object(registerValids)[name]
+                                            ? '#e09d9d'
+                                            : undefined,
+                                }}
+                                invalidTextClassNames={`dynamic-placeholder${
+                                    currentPage === 'login'
+                                        ? !Object(loginValids)[name]
+                                            ? '-invalid'
+                                            : ''
+                                        : Object(registerValids)[name]
+                                        ? '-invalid'
+                                        : ''
+                                } nodrag`}
+                            />
 
-                <button className="common confirm en-sec wei-200" onClick={() => setLoginValids(validate(loginForm))}>
+                            {index !== Object.keys(entries[currentPage]).length - 1 && (
+                                <div style={{ height: '1.5rem' }}></div>
+                            )}
+                        </>
+                    );
+                })}
+
+                <button
+                    className="common confirm en-sec wei-200"
+                    onClick={() => {
+                        currentPage === 'login'
+                            ? setLoginValids(validate(loginForm))
+                            : setLoginValids(validate(registerForm));
+                    }}
+                >
                     LOG IN
                 </button>
                 <p className="en-pri wei-100" style={{ fontSize: '1.6rem', paddingTop: '1.5rem', color: '#666' }}>
