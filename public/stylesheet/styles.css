@@ -4,18 +4,142 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-
-  font-family: "NanumSquareRound", sans-serif;
-}
+  font-family: 'NanumSquareRound', sans-serif;
+  font-display: optional; }
 
 html,
 body {
-  font-size: 62.5%;
-}
+  width: 100%;
+  height: 100%;
+  font-size: 62.5%; }
 
-.fonts {
-  font-family: "Poppins", sans-serif;
-  font-family: "Quicksand", sans-serif;
-  font-family: "Roboto", sans-serif;
-  font-family: "NanumSquareRound", sans-serif;
-}
+input,
+textarea,
+button,
+select,
+a {
+  -webkit-tap-highlight-color: transparent; }
+
+.en-pri {
+  font-family: 'Roboto', sans-serif; }
+
+.en-sec {
+  font-family: 'Quicksand', sans-serif; }
+
+.en-ter {
+  font-family: 'Poppins', sans-serif; }
+
+.ko-pri {
+  font-family: 'NanumSquareRound', sans-serif; }
+
+.wei-100 {
+  font-weight: 100; }
+
+.wei-200 {
+  font-weight: 200; }
+
+.wei-300 {
+  font-weight: 300; }
+
+.wei-400 {
+  font-weight: 400; }
+
+.wei-500 {
+  font-weight: 500; }
+
+.wei-600 {
+  font-weight: 600; }
+
+.wei-700 {
+  font-weight: 700; }
+
+.wei-800 {
+  font-weight: 800; }
+
+.wei-900 {
+  font-weight: 900; }
+
+.def-a {
+  text-decoration: none;
+  color: inherit; }
+
+.nodrag {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
+
+.stage {
+  margin: 0px auto;
+  max-width: 45rem;
+  min-width: 28rem;
+  min-height: 100vh;
+  overflow: hidden;
+  text-overflow: ellipsis; }
+
+#plate-inputs {
+  text-align: center;
+  padding-bottom: 3.4rem; }
+  #plate-inputs .common {
+    display: inline-block;
+    padding: 0 3rem;
+    width: calc(100% - 5rem);
+    height: 6rem;
+    font-size: 2rem;
+    outline: none;
+    border: 1px solid #e0e0e0;
+    border-radius: 100px;
+    transition: border-color 0.2s ease; }
+    #plate-inputs .common::placeholder {
+      color: #e0e0e0; }
+    #plate-inputs .common:not(:first-child) {
+      margin-top: 1.5rem; }
+    #plate-inputs .common-child {
+      width: 2rem;
+      height: 2rem;
+      background-color: red; }
+    #plate-inputs .common:hover ~ .dynamic-placeholder,
+    #plate-inputs .common:focus ~ .dynamic-placeholder,
+    #plate-inputs .common:not(:placeholder-shown) ~ .dynamic-placeholder {
+      color: #999;
+      position: absolute;
+      top: 1rem;
+      left: 5.7rem;
+      font-size: 1.2rem;
+      transform: translateY(0%); }
+    #plate-inputs .common:hover ~ .dynamic-placeholder-invalid,
+    #plate-inputs .common:focus ~ .dynamic-placeholder-invalid,
+    #plate-inputs .common:not(:placeholder-shown) ~ .dynamic-placeholder-invalid {
+      color: #e07070;
+      position: absolute;
+      top: 1rem;
+      left: 5.7rem;
+      font-size: 1.2rem;
+      transform: translateY(0%); }
+  #plate-inputs .text {
+    padding-top: 1rem; }
+  #plate-inputs .dynamic-placeholder {
+    position: absolute;
+    top: 50%;
+    left: 5.7rem;
+    font-size: 2rem;
+    font-weight: 200;
+    color: #e0e0e0;
+    transform: translateY(-50%);
+    transition: all 0.2s ease;
+    pointer-events: none; }
+    #plate-inputs .dynamic-placeholder-invalid {
+      position: absolute;
+      top: 50%;
+      left: 5.7rem;
+      font-size: 2rem;
+      font-weight: 200;
+      color: #e09d9d;
+      transform: translateY(-50%);
+      transition: all 0.2s ease;
+      pointer-events: none; }
+  #plate-inputs .confirm {
+    background-color: white;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+    cursor: pointer;
+    color: #707070; }
