@@ -92,6 +92,106 @@ body {
     user-select: none;
 }
 
+.popup {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba($color: black, $alpha: 0.8);
+
+    z-index: 1000;
+
+    &-area {
+        margin: 0 auto;
+        max-width: 48rem;
+        min-width: 28rem;
+        height: 100%;
+        // background-color: rgba($color: red, $alpha: 0.4);
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &-container {
+            transform-origin: center;
+            background-color: white;
+            width: calc(100% - 7rem);
+            // min-height: 38rem;
+            box-shadow: 0px 3px 6px rgba($color: #000000, $alpha: 0.16);
+            border-radius: 1rem;
+            border: 1px solid #707070;
+
+            display: flex;
+            flex-direction: column;
+            // justify-content: center;
+            align-items: center;
+            padding: 4.6rem 3.2rem 2rem 3.2rem;
+
+            &__icon {
+                &-positive {
+                    width: 8rem;
+                    height: 8rem;
+                    background-image: url('../images/ico_popup_succeed.svg');
+                }
+
+                &-negative {
+                    width: 8rem;
+                    height: 8rem;
+                    background-image: url('../images/ico_popup_warning.svg');
+                }
+            }
+
+            &__desc {
+                padding-top: 2.5rem;
+                padding-bottom: 3.6rem;
+                font-size: 1.6rem;
+                color: #333;
+                text-align: center;
+            }
+
+            &__button {
+                width: 100%;
+                height: 5.2rem;
+                font-size: 2rem;
+                color: #999;
+
+                border: none;
+                border-radius: 1rem;
+                background-color: transparent;
+
+                cursor: pointer;
+
+                &-negative {
+                    background: linear-gradient(120deg, #d65151, #6b2929);
+                    color: #f4f4f4;
+                }
+
+                &-positive {
+                    background: linear-gradient(120deg, #51d651, #296b29);
+                    color: #f4f4f4;
+                }
+
+                &:not(:first-child) {
+                    margin-top: 1rem;
+                }
+            }
+        }
+    }
+
+    &--show {
+        animation: loadingShow 0.2s forwards;
+        &__container {
+            animation: popupShow 0.2s forwards;
+        }
+    }
+
+    &--hide {
+        animation: loadingHide 0.2s forwards;
+        &__container {
+            animation: popupHide 0.2s forwards;
+        }
+    }
+}
+
 .loading {
     position: fixed;
     width: 100%;
@@ -99,7 +199,7 @@ body {
     background-color: rgba($color: black, $alpha: 0.8);
 
     // pointer-events: none;
-    z-index: 10000;
+    z-index: 1000;
 
     display: flex;
     justify-content: center;

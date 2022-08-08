@@ -6,7 +6,7 @@ import RoundyInput from '../RoundyInput';
 import entries from '../../assets/json/entries.json';
 import bread from '../../apis/bread';
 import { useDispatch } from 'react-redux';
-import { setLoading } from '../../modules/defaults';
+import { setLoading, setPopup } from '../../modules/defaults';
 
 type TypeLogin = {
     username: string;
@@ -60,6 +60,35 @@ const Entries = () => {
     });
 
     useEffect(() => {
+        switch (currentPage) {
+            case 'login':
+                setRegisterValids((state) => ({
+                    email: true,
+                    username: true,
+                    password: true,
+                    cfmpassword: true,
+                    attempt: 0,
+                }));
+                setRegisterForm({
+                    email: '',
+                    username: '',
+                    password: '',
+                    cfmpassword: '',
+                });
+                break;
+            case 'register':
+                setLoginValids((state) => ({
+                    username: true,
+                    password: true,
+                    attempt: 0,
+                }));
+                break;
+            default:
+                break;
+        }
+    }, [currentPage]);
+
+    useEffect(() => {
         const shouldSatisfy = Object.keys(loginValids).length;
 
         if (Object.keys(loginValids).filter((i) => Object(loginValids)[i]).length === shouldSatisfy) {
@@ -72,6 +101,34 @@ const Entries = () => {
             });
         }
     }, [loginValids]);
+
+    useEffect(() => {
+        const shouldSatisfy = Object.keys(registerValids).length;
+
+        if (Object.keys(registerValids).filter((i) => Object(registerValids)[i]).length === shouldSatisfy) {
+            dispatch(setLoading(true));
+            // const { email, username, password, cfmpassword } = registerValids;
+
+            // bread.post('/회원가입', {
+            //     email,
+            //     username,
+            //     password,
+            //     cfmpassword,
+            // });
+
+            setTimeout(() => {
+                dispatch(setLoading(false));
+                dispatch(
+                    setPopup(true, 'positive', 'Succeed to create a new account!', false, 'Confirm', 'Cancel', () => {
+                        {
+                            // console.log('컨피름 클릭드');
+                        }
+                    })
+                );
+                setCurrentPage('login');
+            }, 1000);
+        }
+    }, [registerValids]);
 
     return (
         <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
@@ -181,17 +238,7 @@ const Entries = () => {
                         style={{ fontSize: '1.6rem', paddingTop: '1.5rem', color: '#666' }}
                     >
                         Have no account?{' '}
-                        <span
-                            className="wei-900 pointer"
-                            onClick={() => {
-                                setCurrentPage('register');
-                                setLoginValids((state) => ({
-                                    username: true,
-                                    password: true,
-                                    attempt: 0,
-                                }));
-                            }}
-                        >
+                        <span className="wei-900 pointer" onClick={() => setCurrentPage('register')}>
                             SIGN UP
                         </span>
                     </p>
@@ -201,25 +248,7 @@ const Entries = () => {
                         style={{ fontSize: '1.6rem', paddingTop: '1.5rem', color: '#666' }}
                     >
                         Already have account?{' '}
-                        <span
-                            className="wei-900 pointer"
-                            onClick={() => {
-                                setCurrentPage('login');
-                                setRegisterValids((state) => ({
-                                    email: true,
-                                    username: true,
-                                    password: true,
-                                    cfmpassword: true,
-                                    attempt: 0,
-                                }));
-                                setRegisterForm({
-                                    email: '',
-                                    username: '',
-                                    password: '',
-                                    cfmpassword: '',
-                                });
-                            }}
-                        >
+                        <span className="wei-900 pointer" onClick={() => setCurrentPage('login')}>
                             LOG IN
                         </span>
                     </p>

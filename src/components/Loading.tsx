@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { RootState } from '../modules';
 
