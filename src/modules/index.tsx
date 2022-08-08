@@ -1,8 +1,12 @@
 import { combineReducers } from 'redux';
 import counter from './counter';
+import toast from './toast';
+import defaults from './defaults';
 
 const rootReducer = combineReducers({
     counter,
+    toast,
+    defaults,
 });
 
 // 루트 리듀서를 내보내주세요.
