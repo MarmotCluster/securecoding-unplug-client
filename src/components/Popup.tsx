@@ -25,8 +25,9 @@ const Popup = () => {
                 onAnimationEnd={() => {
                     if (!status) setRenderThis(false);
                 }}
+                onClick={() => !renderDual && dispatch(setPopupOff())}
             >
-                <div className="popup-area" onClick={() => !renderDual && dispatch(setPopupOff())}>
+                <div className="popup-area">
                     <div
                         className={`popup-area-container ${
                             status ? 'popup--show__container' : 'popup--hide__container'

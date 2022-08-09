@@ -18,7 +18,7 @@ const App = () => {
             <DisplayRange>
                 <Routes>
                     <Route path="/" element={<Entries />} />
-                    <Route path="/counter" element={<CounterContainer />} />
+                    <Route path="/list" element={<Main />} />
                 </Routes>
             </DisplayRange>
         </BrowserRouter>

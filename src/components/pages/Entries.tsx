@@ -7,6 +7,7 @@ import entries from '../../assets/json/entries.json';
 import bread from '../../apis/bread';
 import { useDispatch } from 'react-redux';
 import { setLoading, setPopup } from '../../modules/defaults';
+import { AxiosError } from 'axios';
 
 type TypeLogin = {
     username: string;
@@ -29,6 +30,7 @@ type ValidateList = {
 };
 
 const Entries = () => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const [currentPage, setCurrentPage] = useState<'login' | 'register'>('login');
@@ -59,6 +61,11 @@ const Entries = () => {
         cfmpassword: '',
     });
 
+    const [showErrorText, setShowErrorText] = useState<{ login: boolean; register: boolean }>({
+        login: false,
+        register: false,
+    });
+
     useEffect(() => {
         switch (currentPage) {
             case 'login':
@@ -75,6 +82,7 @@ const Entries = () => {
                     password: '',
                     cfmpassword: '',
                 });
+                setShowErrorText((state) => ({ ...state, register: false }));
                 break;
             case 'register':
                 setLoginValids((state) => ({
@@ -82,6 +90,8 @@ const Entries = () => {
                     password: true,
                     attempt: 0,
                 }));
+                setShowErrorText((state) => ({ ...state, login: false }));
+
                 break;
             default:
                 break;
@@ -92,13 +102,28 @@ const Entries = () => {
         const shouldSatisfy = Object.keys(loginValids).length;
 
         if (Object.keys(loginValids).filter((i) => Object(loginValids)[i]).length === shouldSatisfy) {
-            dispatch(setLoading(true));
-            const { username, password } = loginValids;
+            // dispatch(setLoading(true));
+            // const { username, password } = loginValids;
 
-            bread.post('/로그인', {
-                username,
-                password,
-            });
+            // const doLogin = async () => {
+            //     try {
+            //         const res = await bread.post('/로그인', {
+            //             username,
+            //             password,
+            //         });
+
+            //         navigate('/list');
+            //     } catch (err) {
+            //         const ex = err as AxiosError;
+            //         if (ex.response) {
+            //             if (Object(ex.response.data).message === '아이디비번오류') {
+            //                 setShowErrorText((state) => ({ ...state, login: true }));
+            //             }
+            //         }
+            //     }
+            // };
+            // doLogin();
+            navigate('list');
         }
     }, [loginValids]);
 
@@ -131,20 +156,8 @@ const Entries = () => {
     }, [registerValids]);
 
     return (
-        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
-            <section
-                id="plate-logo"
-                style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    minHeight: '40rem',
-                    overflow: 'hidden',
-                    flex: '1 1 auto',
-                    transition: 'flex .2s ease',
-                }}
-            >
+        <div className="container-entries">
+            <section id="plate-logo">
                 <Logo style={{ width: 'calc(100% - 6rem)', maxWidth: '26rem', height: 'auto' }} />
                 <p
                     className="en-pri wei-100"
@@ -160,6 +173,12 @@ const Entries = () => {
                 </p>
             </section>
             <section id="plate-inputs">
+                {currentPage === 'login' && showErrorText.login && (
+                    <p className="en-sec error-text">Incorrect Username or Password</p>
+                )}
+                {currentPage === 'register' && showErrorText.register && (
+                    <p className="en-sec error-text">Username is already taken.</p>
+                )}
                 {entries[currentPage].map(({ type, name, onInvalid }, index) => {
                     return (
                         <div key={index}>
