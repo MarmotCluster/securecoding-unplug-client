@@ -123,7 +123,7 @@ const Entries = () => {
             //     }
             // };
             // doLogin();
-            navigate('list');
+            navigate('/list');
         }
     }, [loginValids]);
 
