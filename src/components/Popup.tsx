@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../modules';
 import { setPopupOff } from '../modules/defaults';
-import PopupIcon from './PopupIcon';
+import PopupIcon from './layouts/PopupIcon';
 
 const Popup = () => {
     const [renderThis, setRenderThis] = useState(false);

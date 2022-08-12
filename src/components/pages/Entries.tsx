@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { validate } from '../../utils';
-import Logo from '../Logo';
-import RoundyInput from '../RoundyInput';
+import Logo from '../layouts/Logo';
+import RoundyInput from '../layouts/RoundyInput';
 import entries from '../../assets/json/entries.json';
 import bread from '../../apis/bread';
 import { useDispatch } from 'react-redux';
