@@ -23,7 +23,7 @@ const Loading = () => {
                     if (!status) setRenderThis(false);
                 }}
             >
-                Loading...
+                <div className="loading-loader"></div>
             </div>,
             document.getElementById('modal')!
         );

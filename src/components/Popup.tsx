@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../modules';
 import { setPopupOff } from '../modules/defaults';
+import PopupIcon from './PopupIcon';
 
 const Popup = () => {
     const [renderThis, setRenderThis] = useState(false);
@@ -34,7 +35,9 @@ const Popup = () => {
                         }`}
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className={`popup-area-container__icon-${type}`}></div>
+                        <div className="popup-area-container__icon">
+                            <PopupIcon type={type} style={{ width: '100%', height: '100%' }} />
+                        </div>
                         <p className="popup-area-container__desc en-ter wei-900">{desc}</p>
                         <button
                             className={`en-ter wei-900 popup-area-container__button popup-area-container__button-${type}`}

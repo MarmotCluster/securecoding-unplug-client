@@ -102,7 +102,7 @@ const Entries = () => {
         const shouldSatisfy = Object.keys(loginValids).length;
 
         if (Object.keys(loginValids).filter((i) => Object(loginValids)[i]).length === shouldSatisfy) {
-            // dispatch(setLoading(true));
+            dispatch(setLoading(true));
             // const { username, password } = loginValids;
 
             // const doLogin = async () => {
@@ -123,7 +123,10 @@ const Entries = () => {
             //     }
             // };
             // doLogin();
-            navigate('/list');
+            setTimeout(() => {
+                dispatch(setLoading(false));
+                navigate('/list');
+            }, 1000);
         }
     }, [loginValids]);
 

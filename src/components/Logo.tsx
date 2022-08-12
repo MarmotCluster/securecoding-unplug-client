@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Logo = ({ style }: { style: React.CSSProperties }) => {
+const Logo = ({ style = {} }: { style: React.CSSProperties }) => {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -197,7 +197,3 @@ Q 73.8 75.2 75.75 72.25 79.3 66.9 79.4 63.4 78.05 63.5 77.3 63.8 76.7 64.05 75.4
 };
 
 export default Logo;
-
-Logo.defaultProps = {
-    style: {},
-};

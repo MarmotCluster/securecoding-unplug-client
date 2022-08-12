@@ -30,7 +30,7 @@
         {
             "type": "password",
             "name": "cfmpassword",
-            "onInvalid": "enter should match with password."
+            "onInvalid": "the field does not match with password."
         }
     ]
 }
