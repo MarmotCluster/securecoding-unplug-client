@@ -1,0 +1,76 @@
+{
+    "login": [
+        {
+            "type": "text",
+            "name": "username",
+            "placeholder": "username",
+            "onInvalid": "enter at least 6 characters."
+        },
+        {
+            "type": "password",
+            "name": "password",
+            "placeholder": "password",
+            "onInvalid": "enter at least 8 letters including a letter and a number."
+        }
+    ],
+    "register": [
+        {
+            "type": "email",
+            "name": "email",
+            "placeholder": "email",
+            "onInvalid": "invalid type of email"
+        },
+        {
+            "type": "text",
+            "name": "username",
+            "placeholder": "username",
+            "onInvalid": "enter at least 6 characters."
+        },
+        {
+            "type": "password",
+            "name": "password",
+            "placeholder": "password",
+            "onInvalid": "enter at least 8 letters including a letter and a number."
+        },
+        {
+            "type": "password",
+            "name": "cfmpassword",
+            "placeholder": "password confirm",
+            "onInvalid": "the field does not match with password."
+        }
+    ],
+    "settings": [
+        {
+            "type": "label",
+            "name": "Email"
+        },
+        {
+            "type": "email",
+            "name": "email",
+            "placeholder": "email",
+            "onInvalid": "invalid type of email"
+        },
+        {
+            "type": "label",
+            "name": "Password"
+        },
+        {
+            "type": "password",
+            "name": "password",
+            "placeholder": "Current",
+            "onInvalid": "enter at least 6 characters."
+        },
+        {
+            "type": "password",
+            "name": "newpassword",
+            "placeholder": "New",
+            "onInvalid": "enter at least 6 characters."
+        },
+        {
+            "type": "password",
+            "name": "confirmnewpassword",
+            "placeholder": "Confirm New",
+            "onInvalid": "enter at least 6 characters."
+        }
+    ]
+}

@@ -5,6 +5,7 @@ import DisplayRange from './components/DisplayRange';
 import Loading from './components/Loading';
 import Entries from './components/pages/Entries';
 import Main from './components/pages/Main';
+import Settings from './components/pages/Settings';
 import Popup from './components/Popup';
 import Toast from './components/Toast';
 
@@ -19,6 +20,7 @@ const App = () => {
                 <Routes>
                     <Route path="/" element={<Entries />} />
                     <Route path="/list" element={<Main />} />
+                    <Route path="/settings" element={<Settings />} />
                 </Routes>
             </DisplayRange>
         </BrowserRouter>

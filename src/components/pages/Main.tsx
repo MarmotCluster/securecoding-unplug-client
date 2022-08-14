@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import bread from '../../apis/bread';
 import EarthClip from '../layouts/EarthClip';
+import Header from '../layouts/Header';
 import Logo from '../layouts/Logo';
 
 interface BreadInfo {
@@ -180,18 +181,7 @@ const Main = () => {
 
     return (
         <div className="container-default">
-            <header className="header">
-                <div className="header-backward">
-                    <Link to="/list" className="header-backward-icon header-backward-icon__logo def-a"></Link>
-                </div>
-                <div className="header-text">
-                    <p className="header-text-menu en-pri wei-400">Welcome</p>
-                    <p className="header-text-sub en-pri wei-300">MarmotCluster</p>
-                </div>
-                <div className="header-settings">
-                    <Link to="/settings" className="header-settings-icon def-a"></Link>
-                </div>
-            </header>
+            <Header />
             <main className="main">
                 <div className="main-items">{renderItems()}</div>
                 <div className="main-items-info">

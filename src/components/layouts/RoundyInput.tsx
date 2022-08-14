@@ -3,6 +3,7 @@ import React from 'react';
 interface RoundyInputInterface {
     type: 'text' | 'password' | 'email';
     name: string;
+    placeholder?: string;
     value: string;
     onChange?: (e: React.FormEvent<HTMLInputElement>) => void;
     style: React.CSSProperties;
@@ -13,6 +14,7 @@ interface RoundyInputInterface {
 const RoundyInput = ({
     type,
     name,
+    placeholder,
     value,
     onChange,
     style,
@@ -20,7 +22,7 @@ const RoundyInput = ({
     invalidText,
 }: RoundyInputInterface) => {
     return (
-        <div style={{ position: 'relative' }}>
+        <div className="child">
             <input
                 className="common text en-pri wei-300"
                 type={type}
@@ -32,7 +34,7 @@ const RoundyInput = ({
                 style={style}
             />
             <div className={invalidTextClassNames}>
-                {name === 'cfmpassword' ? 'confirm password' : name} {invalidText}
+                {placeholder ? placeholder : name} {invalidText}
             </div>
         </div>
     );

@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { validate } from '../../utils';
 import Logo from '../layouts/Logo';
 import RoundyInput from '../layouts/RoundyInput';
-import entries from '../../assets/json/entries.json';
+import forms from '../../assets/json/forms.json';
 import bread from '../../apis/bread';
 import { useDispatch } from 'react-redux';
 import { setLoading, setPopup } from '../../modules/defaults';
@@ -182,53 +182,49 @@ const Entries = () => {
                 {currentPage === 'register' && showErrorText.register && (
                     <p className="en-sec error-text">Username is already taken.</p>
                 )}
-                {entries[currentPage].map(({ type, name, onInvalid }, index) => {
+                {forms[currentPage].map(({ type, name, onInvalid, placeholder }, index) => {
                     return (
-                        <div key={index}>
-                            <RoundyInput
-                                type={type as 'password' | 'email' | 'text'}
-                                name={name}
-                                value={currentPage === 'login' ? Object(loginForm)[name] : Object(registerForm)[name]}
-                                onChange={(e) => {
-                                    const target = e.target as HTMLInputElement;
-                                    currentPage === 'login'
-                                        ? setLoginForm((state) => ({ ...state, [target.name]: target.value }))
-                                        : setRegisterForm((state) => ({ ...state, [target.name]: target.value }));
-                                }}
-                                style={{
-                                    borderColor:
-                                        currentPage === 'login'
-                                            ? !Object(loginValids)[name]
-                                                ? '#e09d9d'
-                                                : undefined
-                                            : !Object(registerValids)[name]
-                                            ? '#e09d9d'
-                                            : undefined,
-                                }}
-                                invalidText={
+                        <RoundyInput
+                            key={index}
+                            type={type as 'password' | 'email' | 'text'}
+                            name={name}
+                            placeholder={placeholder && placeholder}
+                            value={currentPage === 'login' ? Object(loginForm)[name] : Object(registerForm)[name]}
+                            onChange={(e) => {
+                                const target = e.target as HTMLInputElement;
+                                currentPage === 'login'
+                                    ? setLoginForm((state) => ({ ...state, [target.name]: target.value }))
+                                    : setRegisterForm((state) => ({ ...state, [target.name]: target.value }));
+                            }}
+                            style={{
+                                borderColor:
                                     currentPage === 'login'
                                         ? !Object(loginValids)[name]
-                                            ? ` - ${onInvalid}`
-                                            : ''
+                                            ? '#e09d9d'
+                                            : undefined
                                         : !Object(registerValids)[name]
+                                        ? '#e09d9d'
+                                        : undefined,
+                            }}
+                            invalidText={
+                                currentPage === 'login'
+                                    ? !Object(loginValids)[name]
                                         ? ` - ${onInvalid}`
                                         : ''
-                                }
-                                invalidTextClassNames={`dynamic-placeholder${
-                                    currentPage === 'login'
-                                        ? !Object(loginValids)[name]
-                                            ? '-invalid'
-                                            : ''
-                                        : !Object(registerValids)[name]
+                                    : !Object(registerValids)[name]
+                                    ? ` - ${onInvalid}`
+                                    : ''
+                            }
+                            invalidTextClassNames={`dynamic-placeholder${
+                                currentPage === 'login'
+                                    ? !Object(loginValids)[name]
                                         ? '-invalid'
                                         : ''
-                                } nodrag`}
-                            />
-
-                            {index !== Object.keys(entries[currentPage]).length - 1 && (
-                                <div style={{ height: '1.5rem' }}></div>
-                            )}
-                        </div>
+                                    : !Object(registerValids)[name]
+                                    ? '-invalid'
+                                    : ''
+                            } nodrag`}
+                        />
                     );
                 })}
 

@@ -297,10 +297,16 @@ body {
             width: 4.8rem;
             height: 4.8rem;
             // background-color: red;
+            background-size: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
 
             &__logo {
                 background-image: url('../images/ico_logo.png');
-                background-size: 100%;
+            }
+
+            &__back {
+                background-image: url('../images/ico_goback.png');
             }
         }
     }
@@ -461,6 +467,7 @@ body {
             border: 1px solid #e0e0e0;
             border-radius: 1rem;
             transform: translate(-50%);
+            cursor: pointer;
 
             left: 50%;
 
@@ -560,6 +567,19 @@ body {
         transition: all 0.2s ease;
         // background-color: red;
 
+        .child {
+            position: relative;
+            &:not(:first-child) {
+                margin-top: 1.5rem;
+            }
+        }
+
+        .label-text {
+            padding-left: 4.5rem;
+            font-size: 1.2rem;
+            text-align: left;
+        }
+
         .error-text {
             display: flex;
             justify-content: center;
@@ -567,7 +587,6 @@ body {
             font-size: 1.4rem;
             padding: 2rem 0;
             color: red;
-
             &::before {
                 content: '';
                 margin-right: 1rem;
