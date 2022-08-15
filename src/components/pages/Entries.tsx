@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { validate } from '../../utils';
+import { validate, ValidateList, CustomFormData } from '../../utils';
 import Logo from '../layouts/Logo';
 import RoundyInput from '../layouts/RoundyInput';
 import forms from '../../assets/json/forms.json';
@@ -12,21 +12,6 @@ import { AxiosError } from 'axios';
 type TypeLogin = {
     username: string;
     password: string;
-};
-
-type FormData = {
-    username?: string;
-    email?: string;
-    password?: string;
-    cfmpassword?: string;
-};
-
-type ValidateList = {
-    username?: boolean;
-    email?: boolean;
-    password?: boolean;
-    cfmpassword?: boolean;
-    attempt: number;
 };
 
 const Entries = () => {
@@ -41,7 +26,7 @@ const Entries = () => {
         attempt: 0,
     });
 
-    const [loginForm, setLoginForm] = useState<FormData>({
+    const [loginForm, setLoginForm] = useState<CustomFormData>({
         username: '',
         password: '',
     });
@@ -54,7 +39,7 @@ const Entries = () => {
         attempt: 0,
     });
 
-    const [registerForm, setRegisterForm] = useState<FormData>({
+    const [registerForm, setRegisterForm] = useState<CustomFormData>({
         email: '',
         username: '',
         password: '',

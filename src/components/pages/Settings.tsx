@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setLoading } from '../../modules/defaults';
+import { setLoading, setPopup } from '../../modules/defaults';
 import Header from '../layouts/Header';
 import RoundyInput from '../layouts/RoundyInput';
 import forms from '../../assets/json/forms.json';
-import { validate } from '../../utils';
+import { CustomFormData, validate, ValidateList } from '../../utils';
 
 interface GeneralInput {
     type: 'email' | 'text' | 'password';
@@ -18,19 +18,19 @@ const Settings = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const [settingsValids, setSettingsValids] = useState({
-        email: true,
+    const [settingsValids, setSettingsValids] = useState<ValidateList>({
+        emptiableemail: true,
         password: true,
         newpassword: true,
-        confirmnewpassword: true,
+        cfmnewpassword: true,
         attempt: 0,
     });
 
-    const [settingsForm, setSettingsForm] = useState({
-        email: '',
+    const [settingsForm, setSettingsForm] = useState<CustomFormData>({
+        emptiableemail: '',
         password: '',
         newpassword: '',
-        confirmnewpassword: '',
+        cfmnewpassword: '',
     });
 
     useEffect(() => {
@@ -60,10 +60,17 @@ const Settings = () => {
             // doLogin();
             setTimeout(() => {
                 dispatch(setLoading(false));
+                dispatch(
+                    setPopup(true, 'positive', 'Succeed to edit your account.', false, 'Confirm', 'Cancel', () => {
+                        {
+                            // console.log('컨피름 클릭드');
+                        }
+                    })
+                );
                 navigate('/list');
             }, 1000);
         }
-    }, [settingsValids]);
+    }, [settingsValids, dispatch, navigate]);
 
     return (
         <div className="container-default" id="plate-inputs" style={{ paddingBottom: '8rem' }}>
@@ -103,13 +110,13 @@ const Settings = () => {
                     className="common confirm en-sec wei-200"
                     style={{ margin: '0 auto', marginTop: '1.5rem' }}
                     onClick={() => {
-                        // setSettingsValids((state) => {
-                        // const res = validate(settingsForm);
-                        //     return {
-                        //         ...res,
-                        //         attempt: state.attempt + 1,
-                        //     };
-                        // });
+                        setSettingsValids((state) => {
+                            const res = validate(settingsForm);
+                            return {
+                                ...res,
+                                attempt: state.attempt + 1,
+                            };
+                        });
                     }}
                 >
                     SAVE

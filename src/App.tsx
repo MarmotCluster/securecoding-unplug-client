@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import CounterContainer from './components/containers/CounterContainer';
 import DisplayRange from './components/DisplayRange';
 import Loading from './components/Loading';
+import Details from './components/pages/Details';
 import Entries from './components/pages/Entries';
 import Main from './components/pages/Main';
 import Settings from './components/pages/Settings';
@@ -21,6 +22,7 @@ const App = () => {
                     <Route path="/" element={<Entries />} />
                     <Route path="/list" element={<Main />} />
                     <Route path="/settings" element={<Settings />} />
+                    <Route path="/details/:id" element={<Details />} />
                 </Routes>
             </DisplayRange>
         </BrowserRouter>

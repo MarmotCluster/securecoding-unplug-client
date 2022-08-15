@@ -46,9 +46,9 @@
         },
         {
             "type": "email",
-            "name": "email",
+            "name": "emptiableemail",
             "placeholder": "email",
-            "onInvalid": "invalid type of email"
+            "onInvalid": "keep empty if you don't want to change."
         },
         {
             "type": "label",
@@ -58,19 +58,19 @@
             "type": "password",
             "name": "password",
             "placeholder": "Current",
-            "onInvalid": "enter at least 6 characters."
+            "onInvalid": "incorrect password"
         },
         {
             "type": "password",
             "name": "newpassword",
             "placeholder": "New",
-            "onInvalid": "enter at least 6 characters."
+            "onInvalid": "enter at least 8 letters including a letter and a number."
         },
         {
             "type": "password",
-            "name": "confirmnewpassword",
+            "name": "cfmnewpassword",
             "placeholder": "Confirm New",
-            "onInvalid": "enter at least 6 characters."
+            "onInvalid": "enter at least 8 letters including a letter and a number."
         }
     ]
 }
