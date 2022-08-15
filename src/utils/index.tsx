@@ -6,6 +6,7 @@ export interface CustomFormData {
     cfmpassword?: string;
     newpassword?: string;
     cfmnewpassword?: string;
+    serialnumber?: string;
     // attempt: number;
 }
 
@@ -17,6 +18,7 @@ export interface ValidateList {
     cfmpassword?: boolean;
     newpassword?: boolean;
     cfmnewpassword?: boolean;
+    serialnumber?: boolean;
     attempt: number;
 }
 
@@ -47,6 +49,9 @@ export const validate = (form: CustomFormData) => {
                 break;
             case 'cfmnewpassword':
                 valids[i] = form.cfmnewpassword === form.newpassword && form.cfmnewpassword!.length > 0;
+                break;
+            case 'serialnumber':
+                valids[i] = form.serialnumber!.indexOf('BREAD') > -1 && form.serialnumber!.length === 15;
                 break;
             default:
                 break;

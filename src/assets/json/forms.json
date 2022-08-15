@@ -72,5 +72,13 @@
             "placeholder": "Confirm New",
             "onInvalid": "enter at least 8 letters including a letter and a number."
         }
+    ],
+    "addnew": [
+        {
+            "type": "text",
+            "name": "serialnumber",
+            "placeholder": "Serial Number",
+            "onInvalid": "invalid serial number"
+        }
     ]
 }
