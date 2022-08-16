@@ -301,7 +301,8 @@ body {
     flex: 1 1 auto;
     padding: 0 2rem;
     width: calc(100% - 9.6rem);
-    overflow: hidden; }
+    overflow: hidden;
+    text-align: left; }
     .header-text-menu {
       font-size: 2.8rem;
       overflow: hidden;
