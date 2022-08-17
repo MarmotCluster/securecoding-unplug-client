@@ -83,6 +83,7 @@ const Settings = () => {
                         case 'email':
                             return (
                                 <RoundyInput
+                                    key={index}
                                     type={i.type as 'password' | 'email' | 'text'}
                                     name={i.name}
                                     placeholder={i.placeholder && i.placeholder}
@@ -101,7 +102,11 @@ const Settings = () => {
                                 />
                             );
                         case 'label':
-                            return <p className="child label-text en-pri wei-300">{i.name}</p>;
+                            return (
+                                <p key={index} className="child label-text en-pri wei-300">
+                                    {i.name}
+                                </p>
+                            );
                         default:
                             break;
                     }

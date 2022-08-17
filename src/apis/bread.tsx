@@ -4,8 +4,8 @@ import { setToastMessage } from '../modules/toast';
 import store from '../store';
 
 const bread = axios.create({
-    baseURL: 'http://localhost:8080',
-    withCredentials: true,
+    baseURL: 'http://localhost:8000',
+    // withCredentials: true,
 });
 
 bread.interceptors.response.use(

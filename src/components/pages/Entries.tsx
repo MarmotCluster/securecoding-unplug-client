@@ -88,7 +88,8 @@ const Entries = () => {
 
         if (Object.keys(loginValids).filter((i) => Object(loginValids)[i]).length === shouldSatisfy) {
             dispatch(setLoading(true));
-            // const { username, password } = loginValids;
+
+            const { username, password } = loginForm;
 
             // const doLogin = async () => {
             //     try {
@@ -108,10 +109,24 @@ const Entries = () => {
             //     }
             // };
             // doLogin();
-            setTimeout(() => {
-                dispatch(setLoading(false));
-                navigate('/list');
-            }, 1000);
+
+            bread
+                .post('/login', {
+                    username,
+                    password,
+                })
+                .then((res) => res && navigate('/list'))
+                .catch((error: AxiosError) => {
+                    console.log(error.response!.data);
+                })
+                .finally(() => {
+                    dispatch(setLoading(false));
+                });
+
+            // setTimeout(() => {
+            //     dispatch(setLoading(false));
+            //     navigate('/list');
+            // }, 1000);
         }
     }, [loginValids]);
 
