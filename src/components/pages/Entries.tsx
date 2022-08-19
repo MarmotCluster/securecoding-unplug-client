@@ -95,48 +95,25 @@ const Entries = () => {
 
             const { username, password } = loginForm;
 
-            // const doLogin = async () => {
-            //     try {
-            //         const res = await bread.post('/로그인', {
-            //             username,
-            //             password,
-            //         });
+            const doLogin = async () => {
+                try {
+                    const res = await bread.post('users/login', {
+                        username,
+                        password,
+                    });
 
-            //         navigate('/list');
-            //     } catch (err) {
-            //         const ex = err as AxiosError;
-            //         if (ex.response) {
-            //             if (Object(ex.response.data).message === '아이디비번오류') {
-            //                 setShowErrorText((state) => ({ ...state, login: true }));
-            //             }
-            //         }
-            //     }
-            // };
-            // doLogin();
-
-            bread
-                .post('users/login', {
-                    username,
-                    password,
-                })
-                .then((res) => {
-                    if (res.data) {
-                        navigate('/list');
-                        dispatch(setLoading(false));
-                    }
-                })
-                .catch((error: AxiosError) => {
-                    console.log(error.response!.data);
-                    dispatch(setLoading(false));
-                });
-            // .finally(() => {
-            //     dispatch(setLoading(false));
-            // });
-
-            // setTimeout(() => {
-            //     dispatch(setLoading(false));
-            //     navigate('/list');
-            // }, 1000);
+                    res && navigate('/list');
+                } catch (err) {
+                    const ex = err as AxiosError;
+                    console.log(ex);
+                    // if (ex.response) {
+                    //     if (Object(ex.response.data).message === '아이디비번오류') {
+                    //         setShowErrorText((state) => ({ ...state, login: true }));
+                    //     }
+                    // }
+                }
+            };
+            doLogin();
         }
     }, [loginValids]);
 
@@ -183,7 +160,7 @@ const Entries = () => {
             //     setCurrentPage('login');
             // }, 1000);
         }
-    }, [registerForm]);
+    }, [registerValids]);
 
     return (
         <div className="container-entries">
