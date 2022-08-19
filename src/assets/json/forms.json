@@ -15,6 +15,12 @@
     ],
     "register": [
         {
+            "type": "text",
+            "name": "name",
+            "placeholder": "name",
+            "onInvalid": "enter name"
+        },
+        {
             "type": "email",
             "name": "email",
             "placeholder": "email",

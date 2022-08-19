@@ -33,6 +33,7 @@ const Entries = () => {
 
     const [registerValids, setRegisterValids] = useState<ValidateList>({
         email: true,
+        name: true,
         username: true,
         password: true,
         cfmpassword: true,
@@ -41,6 +42,7 @@ const Entries = () => {
 
     const [registerForm, setRegisterForm] = useState<CustomFormData>({
         email: '',
+        name: '',
         username: '',
         password: '',
         cfmpassword: '',
@@ -56,6 +58,7 @@ const Entries = () => {
             case 'login':
                 setRegisterValids((state) => ({
                     email: true,
+                    name: true,
                     username: true,
                     password: true,
                     cfmpassword: true,
@@ -63,6 +66,7 @@ const Entries = () => {
                 }));
                 setRegisterForm({
                     email: '',
+                    name: '',
                     username: '',
                     password: '',
                     cfmpassword: '',
@@ -111,17 +115,23 @@ const Entries = () => {
             // doLogin();
 
             bread
-                .post('/login', {
+                .post('users/login', {
                     username,
                     password,
                 })
-                .then((res) => res && navigate('/list'))
+                .then((res) => {
+                    if (res.data) {
+                        navigate('/list');
+                        dispatch(setLoading(false));
+                    }
+                })
                 .catch((error: AxiosError) => {
                     console.log(error.response!.data);
-                })
-                .finally(() => {
                     dispatch(setLoading(false));
                 });
+            // .finally(() => {
+            //     dispatch(setLoading(false));
+            // });
 
             // setTimeout(() => {
             //     dispatch(setLoading(false));
@@ -131,11 +141,13 @@ const Entries = () => {
     }, [loginValids]);
 
     useEffect(() => {
+        console.log(registerValids);
+
         const shouldSatisfy = Object.keys(registerValids).length;
 
         if (Object.keys(registerValids).filter((i) => Object(registerValids)[i]).length === shouldSatisfy) {
             dispatch(setLoading(true));
-            // const { email, username, password, cfmpassword } = registerValids;
+            const { email, name, username, password } = registerForm;
 
             // bread.post('/회원가입', {
             //     email,
@@ -144,19 +156,34 @@ const Entries = () => {
             //     cfmpassword,
             // });
 
-            setTimeout(() => {
-                dispatch(setLoading(false));
-                dispatch(
-                    setPopup(true, 'positive', 'Succeed to create a new account!', false, 'Confirm', 'Cancel', () => {
-                        {
-                            // console.log('컨피름 클릭드');
-                        }
-                    })
-                );
-                setCurrentPage('login');
-            }, 1000);
+            bread
+                .post('users/join', {
+                    email,
+                    name,
+                    username,
+                    password,
+                })
+                .then((res) => res && setCurrentPage('login'))
+                .catch((error: AxiosError) => {
+                    console.log(error.response!.data);
+                })
+                .finally(() => {
+                    dispatch(setLoading(false));
+                });
+
+            // setTimeout(() => {
+            //     dispatch(setLoading(false));
+            //     dispatch(
+            //         setPopup(true, 'positive', 'Succeed to create a new account!', false, 'Confirm', 'Cancel', () => {
+            //             {
+            //                 // console.log('컨피름 클릭드');
+            //             }
+            //         })
+            //     );
+            //     setCurrentPage('login');
+            // }, 1000);
         }
-    }, [registerValids]);
+    }, [registerForm]);
 
     return (
         <div className="container-entries">

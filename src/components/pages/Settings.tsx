@@ -7,12 +7,12 @@ import RoundyInput from '../layouts/RoundyInput';
 import forms from '../../assets/json/forms.json';
 import { CustomFormData, validate, ValidateList } from '../../utils';
 
-interface GeneralInput {
-    type: 'email' | 'text' | 'password';
-    name: string;
-    placeholder: string;
-    onInvalid: string;
-}
+// interface GeneralInput {
+//     type: 'email' | 'text' | 'password';
+//     name: string;
+//     placeholder: string;
+//     onInvalid: string;
+// }
 
 const Settings = () => {
     const navigate = useNavigate();
@@ -42,7 +42,7 @@ const Settings = () => {
 
             // const doLogin = async () => {
             //     try {
-            //         const res = await bread.post('/로그인', {
+            // const res = await bread.post('/로그인', {
             //             username,
             //             password,
             //         });

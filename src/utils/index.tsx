@@ -1,4 +1,5 @@
 export interface CustomFormData {
+    name?: string;
     username?: string;
     email?: string;
     emptiableemail?: string;
@@ -11,6 +12,7 @@ export interface CustomFormData {
 }
 
 export interface ValidateList {
+    name?: boolean;
     username?: boolean;
     email?: boolean;
     emptiableemail?: boolean;
@@ -29,6 +31,9 @@ export const validate = (form: CustomFormData) => {
 
     Object.keys(form).forEach((i: string) => {
         switch (i) {
+            case 'name':
+                valids[i] = form[i]!.length > 0;
+                break;
             case 'username':
                 valids[i] = /^[A-Za-z0-9_-]{6,18}$/.test(form[i]!);
                 break;
