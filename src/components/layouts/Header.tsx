@@ -7,6 +7,7 @@ interface HeaderRequirements {
     renderBackward?: boolean;
     renderLinkSettings?: boolean;
     renderSubTitle?: boolean;
+    isDark?: boolean;
 }
 
 const Header = ({
@@ -15,13 +16,16 @@ const Header = ({
     renderBackward = false,
     renderLinkSettings = true,
     renderSubTitle = true,
+    isDark = false,
 }: HeaderRequirements) => {
     return (
-        <header className="header">
+        <header className="header" style={{ color: isDark ? 'white' : undefined }}>
             <div className="header-backward">
                 <Link
                     to="/list"
-                    className={`header-backward-icon header-backward-icon__${renderBackward ? 'back' : 'logo'} def-a`}
+                    className={`header-backward-icon header-backward-icon__${
+                        renderBackward ? (isDark ? 'back-dark' : 'back') : 'logo'
+                    } def-a`}
                 ></Link>
             </div>
             <div className="header-text">

@@ -8,6 +8,7 @@ import bread from '../../apis/bread';
 import { useDispatch } from 'react-redux';
 import { setLoading, setPopup } from '../../modules/defaults';
 import { AxiosError } from 'axios';
+import { setToastMessage } from '../../modules/toast';
 
 type TypeLogin = {
     username: string;
@@ -105,12 +106,13 @@ const Entries = () => {
                     res && navigate('/list');
                 } catch (err) {
                     const ex = err as AxiosError;
-                    console.log(ex);
+                    console.log(ex.response);
                     // if (ex.response) {
                     //     if (Object(ex.response.data).message === '아이디비번오류') {
                     //         setShowErrorText((state) => ({ ...state, login: true }));
                     //     }
                     // }
+                    dispatch(setToastMessage(Object(ex.response?.data).message));
                 }
             };
             doLogin();
@@ -118,8 +120,6 @@ const Entries = () => {
     }, [loginValids]);
 
     useEffect(() => {
-        console.log(registerValids);
-
         const shouldSatisfy = Object.keys(registerValids).length;
 
         if (Object.keys(registerValids).filter((i) => Object(registerValids)[i]).length === shouldSatisfy) {

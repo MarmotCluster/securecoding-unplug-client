@@ -84,6 +84,22 @@
   100% {
     box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.16); } }
 
+@keyframes expandBreadDetailsShow {
+  from {
+    height: 27.5rem;
+    border-radius: 2rem 2rem 0 0; }
+  to {
+    height: 100%;
+    border-radius: 0rem 0rem 0 0; } }
+
+@keyframes expandBreadDetailsHide {
+  from {
+    height: 100%;
+    border-radius: 0rem 0rem 0 0; }
+  to {
+    height: 27.5rem;
+    border-radius: 2rem 2rem 0 0; } }
+
 *,
 *::before,
 *::after {
@@ -278,9 +294,12 @@ body {
   min-width: 28rem;
   min-height: 100vh;
   overflow: hidden;
-  text-overflow: ellipsis; }
+  text-overflow: ellipsis;
+  position: relative; }
 
 .header {
+  position: relative;
+  z-index: 1;
   width: 100%;
   display: flex;
   align-items: center;
@@ -297,6 +316,8 @@ body {
       background-image: url("../images/ico_logo.png"); }
     .header-backward-icon__back {
       background-image: url("../images/ico_goback.png"); }
+      .header-backward-icon__back-dark {
+        background-image: url("../images/ico_goback_dark.png"); }
   .header-text {
     flex: 1 1 auto;
     padding: 0 2rem;
@@ -327,6 +348,14 @@ body {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column; }
+  .main-canvas {
+    max-width: 45rem;
+    height: 45rem;
+    display: flex;
+    justify-content: center;
+    align-items: center; }
+    .main-canvas-earth {
+      filter: drop-shadow(0px 0px 12px #333); }
   .main-items {
     position: inherit;
     width: 100%;
@@ -448,6 +477,100 @@ body {
         .main-items__item-title-dark {
           color: #ccc; }
 
+.section-fixed {
+  position: absolute;
+  bottom: 0%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  width: 100%;
+  height: 27.5rem;
+  max-width: 45rem;
+  min-width: 28rem;
+  background-color: white;
+  padding: 4rem 2rem;
+  overflow: hidden; }
+  .section-fixed-details {
+    width: 100%;
+    flex: 1 1 auto;
+    overflow-x: hidden;
+    overflow-y: scroll; }
+    .section-fixed-details::-webkit-scrollbar {
+      display: none; }
+    .section-fixed-details .board-graph {
+      width: 100%;
+      height: 30rem;
+      background-color: #f4f4f4;
+      padding: 2rem;
+      position: relative; }
+      .section-fixed-details .board-graph:not(:first-child) {
+        margin-top: 2rem; }
+      .section-fixed-details .board-graph-area {
+        width: 100%; }
+      .section-fixed-details .board-graph-canvas {
+        position: absolute;
+        right: 2rem;
+        width: calc(100% - 7rem);
+        height: 16rem; }
+      .section-fixed-details .board-graph__title {
+        font-size: 1.6rem;
+        color: #333; }
+      .section-fixed-details .board-graph__watt-reuslt {
+        padding-top: 4px;
+        font-size: 3.2rem; }
+      .section-fixed-details .board-graph__watt-guide {
+        display: flex;
+        align-items: flex-end; }
+        .section-fixed-details .board-graph__watt-guide-number {
+          flex: 1 1 auto;
+          text-align: right;
+          padding-right: 8px;
+          font-size: 1.2rem;
+          color: #111; }
+        .section-fixed-details .board-graph__watt-guide-line {
+          width: calc(100% - 3rem);
+          height: 4rem;
+          border-bottom: 1px solid #bababa; }
+          .section-fixed-details .board-graph__watt-guide-line-last {
+            color: #333333;
+            display: flex;
+            justify-content: space-between;
+            width: calc(100% - 3rem);
+            padding-top: 1.2rem;
+            font-size: 1.6rem; }
+  .section-fixed-topradius {
+    border-radius: 2rem 2rem 0 0; }
+  .section-fixed .usedwatts {
+    width: 100%;
+    height: 11rem;
+    margin: 1rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 1rem;
+    font-size: 6.4rem;
+    text-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+    color: #40c969;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; }
+    .section-fixed .usedwatts-desc {
+      width: 100%;
+      font-size: 2rem;
+      color: #707070;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: center; }
+    .section-fixed .usedwatts-showdetails {
+      font-size: 1.2rem;
+      padding-top: 2rem;
+      width: 100%;
+      cursor: pointer;
+      text-align: center; }
+
 .container-entries {
   min-height: 100vh;
   display: flex;
@@ -461,7 +584,14 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  z-index: 1;
   padding: 8rem 0; }
+
+.expandanimation {
+  animation: expandBreadDetailsShow 0.5s forwards; }
+
+.unexpandanimation {
+  animation: expandBreadDetailsHide 0.5s backwards; }
 
 #plate-logo {
   display: flex;

@@ -20,10 +20,9 @@ bread.interceptors.response.use(
         return res;
     },
     function (err) {
-        store.dispatch(setToastMessage(err.message));
+        // store.dispatch(setToastMessage(err.message));
         store.dispatch(setLoading(false));
-
-        // return Promise.reject(err);
+        return Promise.reject(err);
     }
 );
 
