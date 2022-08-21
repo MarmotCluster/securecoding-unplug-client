@@ -79,8 +79,8 @@ const Details = () => {
                         </>
                     ) : (
                         <div className="section-fixed-details">
-                            <GraphItem />
-                            <GraphItem />
+                            <GraphItem title="Realtime (Past an hour)" />
+                            <GraphItem title="by Week" chartType="bar" />
                         </div>
                     )}
                     <p
