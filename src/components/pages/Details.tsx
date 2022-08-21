@@ -1,10 +1,11 @@
 import { AxiosError } from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import bread from '../../apis/bread';
 import { setLoading } from '../../modules/defaults';
 import { setToastMessage } from '../../modules/toast';
+import { getInputDateCurrent } from '../../utils';
 import BrandNewEarth from '../layouts/BrandNewEarth';
 import GraphItem from '../layouts/GraphItem';
 import Header from '../layouts/Header';
@@ -19,28 +20,28 @@ const Details = () => {
         attempt: 0,
     });
 
+    const [datesDataByWeek, setDatesDataByWeek] = useState<string | undefined>(getInputDateCurrent());
+
     useEffect(() => {
         async function requestInit() {
             dispatch(setLoading(true));
             try {
-                const res = await bread.post('/아이템리스트', {
-                    data: {
-                        serial: param.id,
+                const res = await bread.get('/electricities/list', {
+                    params: {
+                        start_date: '2022-04-04',
+                        end_date: '2022-08-08',
                     },
                 });
 
                 if (res.data) {
                     console.log(res.data);
                 }
-
-                // dispatch(setLoading(false));
             } catch (err) {
                 const ex = err as AxiosError;
-                console.log(ex.response);
                 dispatch(setToastMessage('Something went wrong. Try it later.'));
             }
         }
-        // requestInit();
+        requestInit();
     }, []);
 
     return (
@@ -79,8 +80,23 @@ const Details = () => {
                         </>
                     ) : (
                         <div className="section-fixed-details">
-                            <GraphItem title="Realtime (Past an hour)" />
-                            <GraphItem title="by Week" chartType="bar" />
+                            <GraphItem title="Realtime (Past an hour)" chartType="line" />
+                            <GraphItem
+                                title={
+                                    <>
+                                        {'Custom Week ('}
+                                        <input
+                                            type="date"
+                                            className="removedDateStyle"
+                                            value={datesDataByWeek}
+                                            max={getInputDateCurrent()}
+                                            onChange={(e) => setDatesDataByWeek(e.target.value)}
+                                        />
+                                        {')'}
+                                    </>
+                                }
+                                chartType="bar"
+                            />
                         </div>
                     )}
                     <p

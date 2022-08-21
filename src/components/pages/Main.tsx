@@ -20,37 +20,60 @@ const Main = () => {
     const [isLoadingItems, setIsLoadingItems] = useState<boolean>(true);
 
     const [items, setItems] = useState<BreadInfo[] | []>([
-        {
-            index: 0,
-            id: 'BREAD1234',
-            name: 'MY HOME',
-            status: 0,
-        },
-        {
-            index: 1,
-            id: 'BREAD1234',
-            name: '친구집',
-            status: 3,
-        },
-        {
-            index: 2,
-            id: 'BREAD1234',
-            name: '내 가게',
-            status: 4,
-        },
+        // {
+        //     index: 0,
+        //     id: 'BREAD1234',
+        //     name: 'MY HOME',
+        //     status: 0,
+        // },
+        // {
+        //     index: 1,
+        //     id: 'BREAD1234',
+        //     name: '친구집',
+        //     status: 3,
+        // },
+        // {
+        //     index: 2,
+        //     id: 'BREAD1234',
+        //     name: '내 가게',
+        //     status: 4,
+        // },
     ]);
 
     const [currentItemSelected, setCurrentItemSelected] = useState<number>(0);
 
     useEffect(() => {
-        // bread.get('/아이템목록').then((res) => {
-        //     setItems(res.data);
-        //     setIsLoadingItems(false);
-        // });
+        //view_my_entries
+        //view_device_data
+        bread
+            .get('/electricities/device_data')
+            .then((res) => {
+                console.log('받은 기기목록들:', res);
 
-        setTimeout(() => {
-            setIsLoadingItems(false);
-        }, 1000);
+                let resultItems: BreadInfo[] = [];
+                res.data.forEach((i: object, index: number) => {
+                    console.log(i);
+                    resultItems.push({
+                        index,
+                        id: Object(i).serial,
+                        name: Object(i).device_name,
+                        status: 0,
+                    });
+                });
+
+                setItems([...resultItems]);
+
+                bread.get('/electricities/kwatt_level').then((res2) => {
+                    console.log('지구 상태목록', res2);
+                });
+            })
+            .finally(() => {
+                setIsLoadingItems(false);
+            });
+
+        // setTimeout(() => {
+        //     setIsLoadingItems(false);
+        // }, 1000);
     }, []);
 
     const renderItems = () => {

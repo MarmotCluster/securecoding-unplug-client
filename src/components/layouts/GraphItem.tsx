@@ -56,7 +56,6 @@ const GraphItem = ({
                     if (index === 0) {
                         ctx!.moveTo((_width * index) / tailsLength, i);
                     } else {
-                        console.log(i);
                         ctx!.lineTo((_width * index) / tailsLength, i);
                     }
                 });
@@ -64,7 +63,6 @@ const GraphItem = ({
             } else if (chartType === 'bar') {
                 const barSpace = 2;
                 const barWidth = _width / (tailsLength + 1) - barSpace;
-                console.log(barWidth);
 
                 ctx!.clearRect(0, 0, 380, 160);
 

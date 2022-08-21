@@ -6,17 +6,21 @@ import Header from '../layouts/Header';
 import RoundyInput from '../layouts/RoundyInput';
 import forms from '../../assets/json/forms.json';
 import { setLoading, setPopup } from '../../modules/defaults';
+import bread from '../../apis/bread';
+import { AxiosError } from 'axios';
 
 const Addnew = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const [serialNumberValids, setSettingsValids] = useState<ValidateList>({
+        devicename: true,
         serialnumber: true,
         attempt: 0,
     });
 
     const [serialNumberForm, setSettingsForm] = useState<CustomFormData>({
+        devicename: '',
         serialnumber: '',
     });
 
@@ -25,36 +29,49 @@ const Addnew = () => {
 
         if (Object.keys(serialNumberValids).filter((i) => Object(serialNumberValids)[i]).length === shouldSatisfy) {
             dispatch(setLoading(true));
-            // const { serialnumber } = serialNumberValids;
+            const { serialnumber, devicename } = serialNumberForm;
 
-            // const doLogin = async () => {
-            //     try {
-            //         const res = await bread.post('/새기기등록', {
-            //             serialnumber
-            //         });
+            const doLogin = async () => {
+                try {
+                    const res = await bread.post('/users/add_device', {
+                        device_name: devicename,
+                        device: serialnumber,
+                    });
 
-            //         navigate('/list');
-            //     } catch (err) {
-            //         const ex = err as AxiosError;
-            //         if (ex.response) {
-            //             if (Object(ex.response.data).message === '유효하지않은 혹은') {
-            //                 setShowErrorText((state) => ({ ...state, login: true }));
+                    console.log(res);
+                    if (res) {
+                        dispatch(setLoading(false));
+                        dispatch(
+                            setPopup(true, 'positive', 'Succeed to add new device!', false, 'Confirm', 'Cancel', () => {
+                                {
+                                    // console.log('컨피름 클릭드');
+                                }
+                            })
+                        );
+                        navigate('/list');
+                    }
+                } catch (err) {
+                    const ex = err as AxiosError;
+                    // if (ex.response) {
+                    //     if (Object(ex.response.data).message === '유효하지않은 혹은') {
+                    //         setShowErrorText((state) => ({ ...state, login: true }));
+                    //     }
+                    // }
+                }
+            };
+            doLogin();
+
+            // setTimeout(() => {
+            //     dispatch(setLoading(false));
+            //     dispatch(
+            //         setPopup(true, 'positive', 'Succeed to add new device!', false, 'Confirm', 'Cancel', () => {
+            //             {
+            //                 // console.log('컨피름 클릭드');
             //             }
-            //         }
-            //     }
-            // };
-            // doLogin();
-            setTimeout(() => {
-                dispatch(setLoading(false));
-                dispatch(
-                    setPopup(true, 'positive', 'Succeed to add new device!', false, 'Confirm', 'Cancel', () => {
-                        {
-                            // console.log('컨피름 클릭드');
-                        }
-                    })
-                );
-                navigate('/list');
-            }, 1000);
+            //         })
+            //     );
+            //     navigate('/list');
+            // }, 1000);
         }
     }, [serialNumberValids, dispatch, navigate]);
 

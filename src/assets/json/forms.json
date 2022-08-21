@@ -82,6 +82,12 @@
     "addnew": [
         {
             "type": "text",
+            "name": "devicename",
+            "placeholder": "Device Name",
+            "onInvalid": "the field must not be empty."
+        },
+        {
+            "type": "text",
             "name": "serialnumber",
             "placeholder": "Serial Number",
             "onInvalid": "invalid serial number"

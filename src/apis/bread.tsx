@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { setLoading } from '../modules/defaults';
+import { setForceLogout, setLoading, setLoginStatus } from '../modules/defaults';
 import { setToastMessage } from '../modules/toast';
 import store from '../store';
 
@@ -20,8 +20,12 @@ bread.interceptors.response.use(
         return res;
     },
     function (err) {
-        // store.dispatch(setToastMessage(err.message));
+        store.dispatch(setToastMessage(err.message));
         store.dispatch(setLoading(false));
+
+        if (err.response.data.message === '토큰이 유효하지 않습니다.') {
+            store.dispatch(setForceLogout(true));
+        }
         return Promise.reject(err);
     }
 );

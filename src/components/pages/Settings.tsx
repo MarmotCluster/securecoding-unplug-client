@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setLoading, setPopup } from '../../modules/defaults';
+import { setLoading, setLoginStatus, setPopup } from '../../modules/defaults';
 import Header from '../layouts/Header';
 import RoundyInput from '../layouts/RoundyInput';
 import forms from '../../assets/json/forms.json';
 import { CustomFormData, validate, ValidateList } from '../../utils';
+import bread from '../../apis/bread';
 
 // interface GeneralInput {
 //     type: 'email' | 'text' | 'password';
@@ -131,7 +132,17 @@ const Settings = () => {
                     className="en-pri wei-100 nodrag"
                     style={{ fontSize: '1.6rem', paddingTop: '1.5rem', color: '#d65151' }}
                 >
-                    <span className="wei-900 pointer">LOG OUT</span>
+                    <span
+                        className="wei-900 pointer"
+                        onClick={() => {
+                            window.localStorage.removeItem('auth');
+                            Object(bread.defaults.headers).Authorization = '';
+                            dispatch(setLoginStatus(false));
+                            navigate('/');
+                        }}
+                    >
+                        LOG OUT
+                    </span>
                 </p>
             </main>
         </div>

@@ -103,16 +103,20 @@ const Entries = () => {
                         password,
                     });
 
-                    res && navigate('/list');
+                    if (res) {
+                        // Object(bread.defaults.headers).JWT = `Bearer ${res.data.token}`;
+                        Object(bread.defaults.headers).Authorization = `Bearer ${res.data.token}`;
+                        navigate('/list');
+                        window.localStorage.setItem(
+                            'auth',
+                            JSON.stringify({ accessToken: `Bearer ${res.data.token}` })
+                        );
+                    }
                 } catch (err) {
                     const ex = err as AxiosError;
-                    console.log(ex.response);
-                    // if (ex.response) {
-                    //     if (Object(ex.response.data).message === '아이디비번오류') {
-                    //         setShowErrorText((state) => ({ ...state, login: true }));
-                    //     }
-                    // }
-                    dispatch(setToastMessage(Object(ex.response?.data).message));
+                    const message: string = Object(ex.response?.data).message;
+                    // console.log(ex.response);
+                    // dispatch(setToastMessage(message ? message : 'Something went wrong. Try it later.'));
                 }
             };
             doLogin();
@@ -140,12 +144,28 @@ const Entries = () => {
                     username,
                     password,
                 })
-                .then((res) => res && setCurrentPage('login'))
+                .then((res) => {
+                    if (res) {
+                        dispatch(
+                            setPopup(
+                                true,
+                                'positive',
+                                'Succeed to create a new account!',
+                                false,
+                                'Confirm',
+                                'Cancel',
+                                () => {
+                                    {
+                                        //                 // console.log('컨피름 클릭드');
+                                    }
+                                }
+                            )
+                        );
+                        setCurrentPage('login');
+                    }
+                })
                 .catch((error: AxiosError) => {
                     console.log(error.response!.data);
-                })
-                .finally(() => {
-                    dispatch(setLoading(false));
                 });
 
             // setTimeout(() => {

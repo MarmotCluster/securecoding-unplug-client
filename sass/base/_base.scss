@@ -603,6 +603,17 @@ body {
                     &__title {
                         font-size: 1.6rem;
                         color: #333;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        width: 100%;
+
+                        .removedDateStyle {
+                            outline: none;
+                            border: none;
+                            background-color: transparent;
+                            width: max-content;
+                        }
                     }
 
                     &__watt {

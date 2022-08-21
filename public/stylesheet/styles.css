@@ -515,7 +515,16 @@ body {
         height: 16rem; }
       .section-fixed-details .board-graph__title {
         font-size: 1.6rem;
-        color: #333; }
+        color: #333;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 100%; }
+        .section-fixed-details .board-graph__title .removedDateStyle {
+          outline: none;
+          border: none;
+          background-color: transparent;
+          width: max-content; }
       .section-fixed-details .board-graph__watt-reuslt {
         padding-top: 4px;
         font-size: 3.2rem; }

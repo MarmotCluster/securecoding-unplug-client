@@ -1,6 +1,8 @@
 const SET_LOADING = 'defaults/SET_LOADING' as const;
 const SET_POPUP = 'defaults/SET_POPUP' as const;
 const SET_POPUP_OFF = 'defaults/SET_POPUP_OFF' as const;
+const SET_LOGIN_STATUS = 'defaults/SET_LOGIN_STATUS' as const;
+const SET_FORCE_LOGOUT = 'defaults/SET_FORCE_LOGOUT' as const;
 
 export const setLoading = (status: boolean) => ({
     type: SET_LOADING,
@@ -34,7 +36,22 @@ export const setPopupOff = () => ({
     type: SET_POPUP_OFF,
 });
 
-type Action = ReturnType<typeof setLoading> | ReturnType<typeof setPopup> | ReturnType<typeof setPopupOff>;
+export const setLoginStatus = (status: boolean) => ({
+    type: SET_LOGIN_STATUS,
+    payload: status,
+});
+
+export const setForceLogout = (status: boolean) => ({
+    type: SET_FORCE_LOGOUT,
+    payload: status,
+});
+
+type Action =
+    | ReturnType<typeof setLoading>
+    | ReturnType<typeof setPopup>
+    | ReturnType<typeof setPopupOff>
+    | ReturnType<typeof setLoginStatus>
+    | ReturnType<typeof setForceLogout>;
 
 type State = {
     loading: {
@@ -52,6 +69,8 @@ type State = {
         onClickConfirm?: () => void;
         onClickCancel?: () => void;
     };
+    isSignedIn: boolean;
+    isForceLoggedOut: boolean;
 };
 
 const initialState: State = {
@@ -70,6 +89,8 @@ const initialState: State = {
         onClickConfirm: undefined,
         onClickCancel: undefined,
     },
+    isSignedIn: false,
+    isForceLoggedOut: false,
 };
 
 function defaults(state: State = initialState, action: Action): State {
@@ -99,6 +120,16 @@ function defaults(state: State = initialState, action: Action): State {
                     status: false,
                     attempt: state.popup.attempt + 1,
                 },
+            };
+        case SET_LOGIN_STATUS:
+            return {
+                ...state,
+                isSignedIn: action.payload,
+            };
+        case SET_FORCE_LOGOUT:
+            return {
+                ...state,
+                isForceLoggedOut: action.payload,
             };
         default:
             return state;
