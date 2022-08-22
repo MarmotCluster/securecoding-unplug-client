@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import bread from '../../apis/bread';
+import { setCurrentSelectedItem } from '../../modules/defaults';
 import EarthClip from '../layouts/EarthClip';
 import Header from '../layouts/Header';
 import Logo from '../layouts/Logo';
 
-interface BreadInfo {
+export interface BreadInfoList {
     index: number;
     id: string;
     name: string;
@@ -14,69 +16,70 @@ interface BreadInfo {
 
 const Main = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [initializing, setInitializing] = useState<boolean>(true);
 
     const [isLoadingItems, setIsLoadingItems] = useState<boolean>(true);
 
-    const [items, setItems] = useState<BreadInfo[] | []>([
+    const [items, setItems] = useState<BreadInfoList[] | []>([
         // {
         //     index: 0,
-        //     id: 'BREAD1234',
+        //     id: '(UUID)',
         //     name: 'MY HOME',
         //     status: 0,
         // },
-        // {
-        //     index: 1,
-        //     id: 'BREAD1234',
-        //     name: '친구집',
-        //     status: 3,
-        // },
-        // {
-        //     index: 2,
-        //     id: 'BREAD1234',
-        //     name: '내 가게',
-        //     status: 4,
-        // },
     ]);
+
+    const [isAlreadyCalledStatus, setIsAlreadyCalledStatus] = useState(false);
 
     const [currentItemSelected, setCurrentItemSelected] = useState<number>(0);
 
     useEffect(() => {
-        //view_my_entries
-        //view_device_data
+        if (currentItemSelected < items.length) {
+            dispatch(setCurrentSelectedItem(items[currentItemSelected]));
+        }
+    }, [currentItemSelected]);
+
+    useEffect(() => {
         bread
             .get('/electricities/device_data')
             .then((res) => {
-                console.log('받은 기기목록들:', res);
-
-                let resultItems: BreadInfo[] = [];
+                let resultItems: BreadInfoList[] = [];
                 res.data.forEach((i: object, index: number) => {
-                    console.log(i);
                     resultItems.push({
                         index,
                         id: Object(i).serial,
                         name: Object(i).device_name,
-                        status: 0,
+                        status: -1,
                     });
                 });
 
+                dispatch(setCurrentSelectedItem(resultItems[0])); // 이니셜 useeffect로 전달이 되지않아 response를 받으면 바로 dispatch
                 setItems([...resultItems]);
-
-                bread.get('/electricities/kwatt_level').then((res2) => {
-                    console.log('지구 상태목록', res2);
-                });
             })
             .finally(() => {
                 setIsLoadingItems(false);
             });
-
-        // setTimeout(() => {
-        //     setIsLoadingItems(false);
-        // }, 1000);
     }, []);
 
-    const renderItems = () => {
+    useEffect(() => {
+        if (items.length > 0) {
+            if (!isAlreadyCalledStatus) {
+                bread.get('/electricities/kwatt_level').then((res2) => {
+                    let combined: BreadInfoList[] = [...items];
+                    res2.data.forEach((i: number, index: number) => {
+                        const recalculated = 5 - i;
+                        combined[index].status = recalculated;
+                    });
+                    setItems([...combined]);
+                });
+                setIsAlreadyCalledStatus(true);
+            }
+        }
+    }, [items]);
+
+    const renderMyDeviceCards = () => {
         const renderAddnewChildElements = () => {
             return (
                 <>
@@ -125,7 +128,7 @@ const Main = () => {
                 </div>
             );
         } else {
-            const getTarget = (current: number, compareTo: number): false | BreadInfo => {
+            const getTarget = (current: number, compareTo: number): false | BreadInfoList => {
                 if (current < compareTo) {
                     return items[current];
                 } else if (current === compareTo) {
@@ -140,9 +143,9 @@ const Main = () => {
                 }
             };
 
-            const prevTarget: false | BreadInfo = getTarget(currentItemSelected - 1, items.length);
-            const target: BreadInfo = getTarget(currentItemSelected, items.length) as BreadInfo;
-            const nextTarget: false | BreadInfo = getTarget(currentItemSelected + 1, items.length);
+            const prevTarget: false | BreadInfoList = getTarget(currentItemSelected - 1, items.length);
+            const target: BreadInfoList = getTarget(currentItemSelected, items.length) as BreadInfoList;
+            const nextTarget: false | BreadInfoList = getTarget(currentItemSelected + 1, items.length);
 
             // console.log(prevTarget, target, nextTarget);
 
@@ -206,7 +209,7 @@ const Main = () => {
         <div className="container-default">
             <Header />
             <main className="main">
-                <div className="main-items">{renderItems()}</div>
+                <div className="main-items">{renderMyDeviceCards()}</div>
                 <div className="main-items-info">
                     <p className="main-items-info__text en-ter wei-900">
                         {currentItemSelected < items.length ? 'status of the own region is:' : '-'}

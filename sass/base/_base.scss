@@ -92,6 +92,14 @@ body {
     user-select: none;
 }
 
+img {
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    // user-drag: none;
+}
+
 .popup {
     position: fixed;
     width: 100%;
@@ -364,9 +372,27 @@ body {
         display: flex;
         justify-content: center;
         align-items: center;
+        position: relative;
 
-        &-earth {
-            filter: drop-shadow(0px 0px 12px #333);
+        // &-earth {
+        //     filter: drop-shadow(0px 0px 12px #1a6da5);
+        // }
+
+        &-trees {
+            position: absolute;
+            width: 0;
+            height: 0;
+            background-color: red;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            &__tree {
+                position: absolute;
+                top: 0;
+                left: 0;
+                transform: translate(-36px, -100%);
+            }
         }
     }
 
@@ -632,6 +658,9 @@ body {
                                 padding-right: 8px;
                                 font-size: 1.2rem;
                                 color: #111;
+                                overflow: hidden;
+                                // text-overflow: ellipsis;
+                                width: 3rem;
                             }
 
                             &-line {

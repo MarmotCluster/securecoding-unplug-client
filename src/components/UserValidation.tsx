@@ -22,7 +22,7 @@ const UserValidation = () => {
                 navigate('/list');
             }
         } else {
-            console.log(location);
+            // console.log(location);
             if (Object(auth).accessToken) {
                 Object(bread.defaults.headers).Authorization = Object(auth).accessToken;
                 dispatch(setLoginStatus(true));

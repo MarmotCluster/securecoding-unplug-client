@@ -168,6 +168,12 @@ body {
   -ms-user-select: none;
   user-select: none; }
 
+img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none; }
+
 .popup {
   position: fixed;
   width: 100%;
@@ -353,9 +359,21 @@ body {
     height: 45rem;
     display: flex;
     justify-content: center;
-    align-items: center; }
-    .main-canvas-earth {
-      filter: drop-shadow(0px 0px 12px #333); }
+    align-items: center;
+    position: relative; }
+    .main-canvas-trees {
+      position: absolute;
+      width: 0;
+      height: 0;
+      background-color: red;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%); }
+      .main-canvas-trees__tree {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translate(-36px, -100%); }
   .main-items {
     position: inherit;
     width: 100%;
@@ -536,7 +554,9 @@ body {
           text-align: right;
           padding-right: 8px;
           font-size: 1.2rem;
-          color: #111; }
+          color: #111;
+          overflow: hidden;
+          width: 3rem; }
         .section-fixed-details .board-graph__watt-guide-line {
           width: calc(100% - 3rem);
           height: 4rem;

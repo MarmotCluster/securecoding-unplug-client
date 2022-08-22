@@ -1,8 +1,12 @@
+import { BreadInfoList } from '../components/pages/Main';
+
 const SET_LOADING = 'defaults/SET_LOADING' as const;
 const SET_POPUP = 'defaults/SET_POPUP' as const;
 const SET_POPUP_OFF = 'defaults/SET_POPUP_OFF' as const;
 const SET_LOGIN_STATUS = 'defaults/SET_LOGIN_STATUS' as const;
 const SET_FORCE_LOGOUT = 'defaults/SET_FORCE_LOGOUT' as const;
+
+const SET_CURRENT_SELECTED_ITEM = 'defaults/SET_CURRENT_SELECTED_ITEM' as const;
 
 export const setLoading = (status: boolean) => ({
     type: SET_LOADING,
@@ -46,12 +50,18 @@ export const setForceLogout = (status: boolean) => ({
     payload: status,
 });
 
+export const setCurrentSelectedItem = (item: BreadInfoList) => ({
+    type: SET_CURRENT_SELECTED_ITEM,
+    payload: item,
+});
+
 type Action =
     | ReturnType<typeof setLoading>
     | ReturnType<typeof setPopup>
     | ReturnType<typeof setPopupOff>
     | ReturnType<typeof setLoginStatus>
-    | ReturnType<typeof setForceLogout>;
+    | ReturnType<typeof setForceLogout>
+    | ReturnType<typeof setCurrentSelectedItem>;
 
 type State = {
     loading: {
@@ -71,6 +81,7 @@ type State = {
     };
     isSignedIn: boolean;
     isForceLoggedOut: boolean;
+    currentSelectedItemIs: BreadInfoList;
 };
 
 const initialState: State = {
@@ -91,6 +102,12 @@ const initialState: State = {
     },
     isSignedIn: false,
     isForceLoggedOut: false,
+    currentSelectedItemIs: {
+        index: 0,
+        id: '',
+        name: '',
+        status: 0,
+    },
 };
 
 function defaults(state: State = initialState, action: Action): State {
@@ -130,6 +147,11 @@ function defaults(state: State = initialState, action: Action): State {
             return {
                 ...state,
                 isForceLoggedOut: action.payload,
+            };
+        case SET_CURRENT_SELECTED_ITEM:
+            return {
+                ...state,
+                currentSelectedItemIs: action.payload,
             };
         default:
             return state;

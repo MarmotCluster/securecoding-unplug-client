@@ -1,19 +1,30 @@
 import { AxiosError } from 'axios';
 import React, { useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import bread from '../../apis/bread';
+import { RootState } from '../../modules';
 import { setLoading } from '../../modules/defaults';
 import { setToastMessage } from '../../modules/toast';
-import { getInputDateCurrent } from '../../utils';
-import BrandNewEarth from '../layouts/BrandNewEarth';
-import GraphItem from '../layouts/GraphItem';
+import { getDateFromNumbers, getDateFromString, getInputDateCurrent } from '../../utils';
+import BrandNewEarth, { BrandNewEarthStatusColor } from '../layouts/BrandNewEarth';
+import GraphItem, { GraphItemProps } from '../layouts/GraphItem';
 import Header from '../layouts/Header';
+import statics from '../../assets/json/statics.json';
+
+interface periodAverageProps {
+    created_at: string;
+    id: number;
+    serial: string;
+    watt: number;
+}
 
 const Details = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const param = useParams();
+    const { currentSelectedItemIs } = useSelector((state: RootState) => state.defaults);
 
     const [isOpenedDetails, setIsOpenedDetails] = useState({
         status: false,
@@ -21,20 +32,99 @@ const Details = () => {
     });
 
     const [datesDataByWeek, setDatesDataByWeek] = useState<string | undefined>(getInputDateCurrent());
+    const [weeklyWattages, setWeeklyWattages] = useState<GraphItemProps>({
+        horizonalRange: { start: 0, interval: 5 },
+        tails: [],
+        result: 0,
+        oldestString: '',
+        newestString: '',
+    });
+
+    const [monthlyUsedPower, setMonthlyUsedPower] = useState<number>(-1);
 
     useEffect(() => {
         async function requestInit() {
             dispatch(setLoading(true));
             try {
-                const res = await bread.get('/electricities/list', {
+                const res = await bread.get('/electricities/average_kwatt');
+
+                if (res.data) {
+                    setMonthlyUsedPower(res.data[0].average_Kwatt);
+                }
+            } catch (err) {
+                const ex = err as AxiosError;
+                dispatch(setToastMessage('Something went wrong. Try it later.'));
+            }
+        }
+
+        if (currentSelectedItemIs.id === '') {
+            navigate('/list');
+        } else {
+            requestInit();
+        }
+    }, []);
+
+    useEffect(() => {
+        async function requestInit() {
+            dispatch(setLoading(true));
+
+            let gotCurrentDate: number[] = getDateFromString(datesDataByWeek!);
+
+            try {
+                const res = await bread.get('/electricities/period_average', {
                     params: {
-                        start_date: '2022-04-04',
-                        end_date: '2022-08-08',
+                        start_date: getDateFromNumbers(
+                            gotCurrentDate[0],
+                            gotCurrentDate[1],
+                            gotCurrentDate[2],
+                            0,
+                            0,
+                            7
+                        ),
+                        end_date: getDateFromNumbers(gotCurrentDate[0], gotCurrentDate[1], gotCurrentDate[2], 0, 0, 1),
+                        serial: param.id,
                     },
                 });
 
                 if (res.data) {
-                    console.log(res.data);
+                    let finalData: number[] = [];
+                    let minValue = -1;
+                    let maxValue = -1;
+                    let totals = 0;
+                    let gotOldestDate = '';
+                    let gotNewestDate = '';
+
+                    res.data.forEach((i: periodAverageProps[]) => {
+                        if (i.length > 0) {
+                            gotNewestDate = i[0].created_at.split('T')[0];
+
+                            if (gotOldestDate === '') {
+                                gotOldestDate = i[0].created_at.split('T')[0];
+                            }
+                            if (minValue === -1 || minValue > i[0].watt) {
+                                minValue = i[0].watt;
+                            }
+                            if (maxValue === -1 || maxValue < i[0].watt) {
+                                maxValue = i[0].watt;
+                            }
+                            totals += i[0].watt;
+
+                            finalData.push(i[0].watt);
+                        }
+                    });
+
+                    // console.log('파이널 데이터는', finalData, minValue, maxValue);
+                    setWeeklyWattages((state) => ({
+                        ...state,
+                        tails: [...finalData],
+                        horizonalRange: {
+                            start: 0,
+                            interval: maxValue / 3,
+                        },
+                        result: totals,
+                        oldestString: gotOldestDate,
+                        newestString: gotNewestDate,
+                    }));
                 }
             } catch (err) {
                 const ex = err as AxiosError;
@@ -42,13 +132,13 @@ const Details = () => {
             }
         }
         requestInit();
-    }, []);
+    }, [datesDataByWeek]);
 
     return (
         <>
             <div className="container-default">
                 <Header
-                    title={'My Home'}
+                    title={currentSelectedItemIs.name}
                     subtitle="Details"
                     renderBackward
                     renderLinkSettings={false}
@@ -56,8 +146,40 @@ const Details = () => {
                 />
                 <main className="main">
                     <div className="main-canvas">
-                        <div className="main-canvas-earth">
-                            <BrandNewEarth />
+                        <div
+                            className="main-canvas-earth"
+                            style={{
+                                filter: `drop-shadow(0px 0px 12px ${
+                                    BrandNewEarthStatusColor.sphere[currentSelectedItemIs.status]
+                                })`,
+                            }}
+                        >
+                            <BrandNewEarth
+                                sea={BrandNewEarthStatusColor.sea[currentSelectedItemIs.status]}
+                                ground={BrandNewEarthStatusColor.ground[currentSelectedItemIs.status]}
+                            />
+                        </div>
+                        <div className="main-canvas-trees">
+                            {(function () {
+                                const randomized = Math.random();
+                                const isCurrentTreeAlive = (4 - currentSelectedItemIs.status) / 4;
+
+                                return statics.tree.map((i, index) => {
+                                    return (
+                                        <img
+                                            key={index}
+                                            src={`/images/${
+                                                randomized < isCurrentTreeAlive ? 'tree_healthy' : 'tree_dead'
+                                            }.svg`}
+                                            className="main-canvas-trees__tree nodrag"
+                                            style={{
+                                                top: `${i.y}px`,
+                                                left: `${i.x}px`,
+                                            }}
+                                        />
+                                    );
+                                });
+                            })()}
                         </div>
                     </div>
                 </main>
@@ -76,11 +198,15 @@ const Details = () => {
                     {!isOpenedDetails.status ? (
                         <>
                             <p className="en-ter wei-900 usedwatts-desc">Power Consumption of the month</p>
-                            <p className="en-ter wei-900 usedwatts">123kW</p>
+                            <p className="en-ter wei-900 usedwatts">{monthlyUsedPower}kW</p>
                         </>
                     ) : (
                         <div className="section-fixed-details">
-                            <GraphItem title="Realtime (Past an hour)" chartType="line" />
+                            <GraphItem
+                                title="Realtime (Past an hour)"
+                                chartType="line"
+                                tails={[0, 10, 5, 7, 3, 10, 5, 7, 3, 10, 5, 7, 3, 10, 5, 7, 3, 10, 5, 7]}
+                            />
                             <GraphItem
                                 title={
                                     <>
@@ -95,7 +221,12 @@ const Details = () => {
                                         {')'}
                                     </>
                                 }
+                                result={weeklyWattages.result}
                                 chartType="bar"
+                                horizonalRange={weeklyWattages.horizonalRange}
+                                tails={weeklyWattages.tails}
+                                oldestString={weeklyWattages.oldestString}
+                                newestString={weeklyWattages.newestString}
                             />
                         </div>
                     )}

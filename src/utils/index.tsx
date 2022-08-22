@@ -83,3 +83,20 @@ export const getInputDateCurrent = (): string => {
     const date = new Date();
     return `${date.getFullYear()}-${addLeadingZeros(date.getMonth() + 1, 2)}-${date.getDate()}`;
 };
+
+export const getDateFromString = (dateString: string) => {
+    const date = new Date(dateString);
+    return [date.getFullYear(), date.getMonth() + 1, date.getDate()];
+};
+
+export const getDateFromNumbers = (
+    y: number,
+    m: number,
+    d: number,
+    deductY: number = 0,
+    deductM: number = 0,
+    deductD: number = 0
+) => {
+    const date = new Date(y - deductY, m - deductM - 1, d - deductD + 1);
+    return `${date.getFullYear()}-${addLeadingZeros(date.getMonth() + 1, 2)}-${date.getDate()}`;
+};

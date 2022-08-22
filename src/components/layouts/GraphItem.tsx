@@ -1,12 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 
-interface GraphItemProps {
+export interface GraphItemProps {
     title?: string | React.ReactNode;
     result?: number;
     horizonalRange?: { start: number; interval: number };
     tails?: number[];
     chartType?: 'bar' | 'line';
     oldestString?: string;
+    newestString?: string;
 }
 
 const GraphItem = ({
@@ -16,10 +17,12 @@ const GraphItem = ({
         start: 0,
         interval: 5,
     },
-    tails = [0, 15, 2, 15, 5],
+    tails = [0],
     chartType = 'line',
     oldestString = 'undefined ago',
+    newestString = 'now',
 }: GraphItemProps) => {
+    // chartType === 'bar' && console.log(result, horizonalRange, tails.length, oldestString, newestString);
     const canvas = useRef(null);
 
     let ctx: CanvasRenderingContext2D | null = null;
@@ -65,24 +68,22 @@ const GraphItem = ({
                 const barWidth = _width / (tailsLength + 1) - barSpace;
 
                 ctx!.clearRect(0, 0, 380, 160);
+                ctx!.fillStyle = '#00B2AC';
 
                 retails.forEach((i, index) => {
                     if (index === 0) {
                         ctx!.beginPath();
                         ctx!.fillRect(barSpace, i, barWidth, 160 - i);
-                        // ctx!.fillRect(0, 0, barWidth, 20);
-                        ctx!.fillStyle = '#00B2AC';
                         ctx!.stroke();
                     } else {
                         ctx!.beginPath();
                         ctx!.fillRect((barWidth + barSpace) * index + barSpace, i, barWidth, 160 - i);
-                        ctx!.fillStyle = '#00B2AC';
                         ctx!.stroke();
                     }
                 });
             }
         }
-    }, []);
+    }, [tails, horizonalRange]);
 
     const renderHorizonalRange = () => {
         const rearr: number[] = (function () {
@@ -97,7 +98,7 @@ const GraphItem = ({
         return rearr.map((i, index) => {
             return (
                 <div key={index} className="board-graph__watt-guide en-ter wei-500">
-                    <p className="board-graph__watt-guide-number">{i}</p>
+                    <p className="board-graph__watt-guide-number">{i < 0 ? '0' : (i / 1000).toFixed(1)}k</p>
                     <div className="board-graph__watt-guide-line"></div>
                 </div>
             );
@@ -107,7 +108,7 @@ const GraphItem = ({
     return (
         <div className="board-graph">
             <p className="board-graph__title en-sec wei-500">{title}</p>
-            <p className="board-graph__watt-reuslt en-ter wei-500">{result}kW</p>
+            <p className="board-graph__watt-reuslt en-ter wei-500">{(result / 1000).toFixed(1)}kW</p>
             <div className="board-graph-area">
                 <canvas ref={canvas} className="board-graph-canvas" width="380px" height="160px"></canvas>
                 {renderHorizonalRange()}
@@ -115,7 +116,7 @@ const GraphItem = ({
                     <p className="board-graph__watt-guide-number"></p>
                     <div className="board-graph__watt-guide-line-last">
                         <p className="en-sec">{oldestString}</p>
-                        <p className="en-sec">now</p>
+                        <p className="en-sec">{newestString}</p>
                     </div>
                 </div>
             </div>
