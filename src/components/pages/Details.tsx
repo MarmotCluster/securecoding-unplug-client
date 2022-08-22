@@ -31,6 +31,14 @@ const Details = () => {
         attempt: 0,
     });
 
+    const [realtimeRefreshAttempt, setRealtimeRefreshAttempt] = useState(0);
+    const [realtimemWattages, setRealtimemWattages] = useState<GraphItemProps>({
+        horizonalRange: { start: 0, interval: 5 },
+        tails: [],
+        result: 0,
+        oldestString: 'an hour ago',
+        newestString: 'now',
+    });
     const [datesDataByWeek, setDatesDataByWeek] = useState<string | undefined>(getInputDateCurrent());
     const [weeklyWattages, setWeeklyWattages] = useState<GraphItemProps>({
         horizonalRange: { start: 0, interval: 5 },
@@ -113,7 +121,6 @@ const Details = () => {
                         }
                     });
 
-                    // console.log('파이널 데이터는', finalData, minValue, maxValue);
                     setWeeklyWattages((state) => ({
                         ...state,
                         tails: [...finalData],
@@ -127,12 +134,68 @@ const Details = () => {
                     }));
                 }
             } catch (err) {
-                const ex = err as AxiosError;
+                // const ex = err as AxiosError;
                 dispatch(setToastMessage('Something went wrong. Try it later.'));
             }
         }
         requestInit();
     }, [datesDataByWeek]);
+
+    useEffect(() => {
+        async function requestInit() {
+            dispatch(setLoading(true));
+
+            try {
+                const res = await bread.get('/electricities/my_entries');
+
+                if (res.data) {
+                    let finalData: number[] = [];
+                    let minValue = -1;
+                    let maxValue = -1;
+                    let totals = 0;
+
+                    res.data[0].forEach((i: periodAverageProps) => {
+                        if (minValue === -1 || minValue > i.watt) {
+                            minValue = i.watt;
+                        }
+                        if (maxValue === -1 || maxValue < i.watt) {
+                            maxValue = i.watt;
+                        }
+                        totals += i.watt;
+
+                        finalData.push(i.watt);
+                    });
+
+                    // console.log(finalData.length, minValue, maxValue, totals);
+                    setRealtimemWattages((state) => ({
+                        ...state,
+                        tails: [...finalData],
+                        horizonalRange: {
+                            start: 0,
+                            interval: maxValue / 3,
+                        },
+                        result: totals,
+                    }));
+                }
+            } catch (err) {}
+        }
+
+        function refreshDate() {
+            if (isOpenedDetails.status) {
+                requestInit();
+            }
+
+            setRealtimeRefreshAttempt((state) => state + 1);
+        }
+
+        const tick = setInterval(refreshDate, 60000);
+
+        if (realtimeRefreshAttempt === 0) {
+            requestInit();
+        }
+
+        return () => clearInterval(tick);
+    }, [realtimeRefreshAttempt]);
 
     return (
         <>
@@ -205,7 +268,11 @@ const Details = () => {
                             <GraphItem
                                 title="Realtime (Past an hour)"
                                 chartType="line"
-                                tails={[0, 10, 5, 7, 3, 10, 5, 7, 3, 10, 5, 7, 3, 10, 5, 7, 3, 10, 5, 7]}
+                                result={realtimemWattages.result}
+                                horizonalRange={realtimemWattages.horizonalRange}
+                                tails={realtimemWattages.tails}
+                                oldestString={realtimemWattages.oldestString}
+                                newestString={realtimemWattages.newestString}
                             />
                             <GraphItem
                                 title={
@@ -221,8 +288,8 @@ const Details = () => {
                                         {')'}
                                     </>
                                 }
-                                result={weeklyWattages.result}
                                 chartType="bar"
+                                result={weeklyWattages.result}
                                 horizonalRange={weeklyWattages.horizonalRange}
                                 tails={weeklyWattages.tails}
                                 oldestString={weeklyWattages.oldestString}

@@ -9,8 +9,10 @@ const DisplayRange = ({ children }: { children: React.ReactNode }) => {
 
         if (pathname.indexOf('/details') > -1) {
             setBackgroundColor('#0F193B');
+            document.getElementById('root')!.style.backgroundColor = '#0F193B';
         } else {
             setBackgroundColor(undefined);
+            document.getElementById('root')!.style.backgroundColor = '';
         }
     }, [location]);
 
