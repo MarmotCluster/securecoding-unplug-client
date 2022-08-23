@@ -89,7 +89,7 @@
         {
             "type": "text",
             "name": "serialnumber",
-            "placeholder": "Serial Number",
+            "placeholder": "(UUID)Serial Number",
             "onInvalid": "invalid serial number"
         }
     ]

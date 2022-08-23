@@ -35,6 +35,8 @@ const Main = () => {
 
     const [currentItemSelected, setCurrentItemSelected] = useState<number>(0);
 
+    const [username, setUsername] = useState('loading...');
+
     useEffect(() => {
         if (currentItemSelected < items.length) {
             dispatch(setCurrentSelectedItem(items[currentItemSelected]));
@@ -42,6 +44,12 @@ const Main = () => {
     }, [currentItemSelected]);
 
     useEffect(() => {
+        bread.post('users/get_user_info').then((res) => {
+            if (res.data) {
+                setUsername(res.data.name);
+            }
+        });
+
         bread
             .get('/electricities/device_data')
             .then((res) => {
@@ -207,7 +215,7 @@ const Main = () => {
 
     return (
         <div className="container-default">
-            <Header />
+            <Header subtitle={username} />
             <main className="main">
                 <div className="main-items">{renderMyDeviceCards()}</div>
                 <div className="main-items-info">

@@ -19,7 +19,7 @@ const Header = ({
     isDark = false,
 }: HeaderRequirements) => {
     return (
-        <header className="header" style={{ color: isDark ? 'white' : undefined }}>
+        <header className="header nowrap" style={{ color: isDark ? 'white' : undefined }}>
             <div className="header-backward">
                 <Link
                     to="/list"

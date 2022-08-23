@@ -63,8 +63,13 @@ export const validate = (form: CustomFormData) => {
                 valids[i] = form[i]!.length > 0;
                 break;
             case 'serialnumber':
+                valids[i] =
+                    form.serialnumber!.length > 0 &&
+                    /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/.test(
+                        form[i]!
+                    );
                 // valids[i] = form.serialnumber!.indexOf('BREAD') > -1 && form.serialnumber!.length === 15;
-                valids[i] = form[i]!.length > 0;
+                // valids[i] = form[i]!.length > 0;
                 break;
             default:
                 break;

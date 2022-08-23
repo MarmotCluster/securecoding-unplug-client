@@ -34,12 +34,14 @@ const Settings = () => {
         cfmnewpassword: '',
     });
 
+    const [username, setUsername] = useState('loading...');
+
     useEffect(() => {
         const shouldSatisfy = Object.keys(settingsValids).length;
 
         if (Object.keys(settingsValids).filter((i) => Object(settingsValids)[i]).length === shouldSatisfy) {
             dispatch(setLoading(true));
-            // const { username, password } = settingsValids;
+            // const { username, password } = settingsForm;
 
             // const doLogin = async () => {
             //     try {
@@ -73,9 +75,17 @@ const Settings = () => {
         }
     }, [settingsValids, dispatch, navigate]);
 
+    useEffect(() => {
+        bread.post('users/get_user_info').then((res) => {
+            if (res.data) {
+                setUsername(res.data.name);
+            }
+        });
+    }, []);
+
     return (
         <div className="container-default" id="plate-inputs" style={{ paddingBottom: '8rem' }}>
-            <Header title="Settings" subtitle="MarmotCluster" renderBackward={true} renderLinkSettings={false} />
+            <Header title="Settings" subtitle={username} renderBackward={true} renderLinkSettings={false} />
             <main className="main" style={{ justifyContent: 'flex-end' }}>
                 {forms.settings.map((i, index: number) => {
                     switch (i.type) {
