@@ -9,7 +9,8 @@
 ## preview: prototype
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/87087163/185739991-70aa8bbf-f999-449f-b6eb-8a64829f917b.PNG">
+<img src="https://user-images.githubusercontent.com/87087163/186233609-3df8aaf6-f420-47a7-b972-bc988dc33835.png">
+
 </p>
 
 ## how to run
