@@ -697,7 +697,7 @@ img {
         .usedwatts {
             // border: 1px solid #e0e0e0;
             width: 100%;
-            height: 11rem;
+            // height: 11rem;
 
             margin: 1rem 0;
 
@@ -715,6 +715,17 @@ img {
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+
+            &-capital {
+                width: 100%;
+                text-align: center;
+                font-size: 1.4rem;
+
+                & span {
+                    font-family: inherit;
+                    color: #40c969;
+                }
+            }
 
             &-desc {
                 width: 100%;

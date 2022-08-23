@@ -50,14 +50,42 @@ const Details = () => {
 
     const [monthlyUsedPower, setMonthlyUsedPower] = useState<number>(-1);
 
+    const [capitalAverages, setCapitalAverages] = useState<number>(0);
+
     useEffect(() => {
+        bread.get('electricities/average_kwatt').then((res) => {
+            if (res.data) {
+                setCapitalAverages(res.data[0].average_Kwatt);
+            }
+        });
+
+        // bread.get('electricities/average_money', { data: { month: 8 } }).then((res) => {
+        //     res.data && console.log(res.data);
+        // });
+
         async function requestInit() {
             dispatch(setLoading(true));
             try {
-                const res = await bread.get('/electricities/average_kwatt');
+                const res = await bread.get('/electricities/my_entries');
 
                 if (res.data) {
-                    setMonthlyUsedPower(res.data[0].average_Kwatt);
+                    const getAverageOfMine = (arr: periodAverageProps[]): number => {
+                        console.log(arr);
+
+                        let totals: number = 0;
+                        let counts: number = 0;
+
+                        arr.forEach((i: periodAverageProps, index: number) => {
+                            if (i.serial === param.id) {
+                                totals += i.watt;
+                                counts++;
+                            }
+                        });
+
+                        return Math.floor(totals / counts);
+                    };
+
+                    setMonthlyUsedPower(getAverageOfMine(res.data[0]));
                 }
             } catch (err) {
                 const ex = err as AxiosError;
@@ -203,7 +231,17 @@ const Details = () => {
                 <Header
                     title={currentSelectedItemIs.name}
                     subtitle="Details"
-                    renderBackward
+                    renderBackward={
+                        isOpenedDetails.status
+                            ? () => {
+                                  setIsOpenedDetails((state) => ({
+                                      ...state,
+                                      status: false,
+                                      attempt: state.attempt + 1,
+                                  }));
+                              }
+                            : true
+                    }
                     renderLinkSettings={false}
                     isDark={!isOpenedDetails.status}
                 />
@@ -262,6 +300,9 @@ const Details = () => {
                         <>
                             <p className="en-ter wei-900 usedwatts-desc">Power Consumption of the month</p>
                             <p className="en-ter wei-900 usedwatts">{monthlyUsedPower}kW</p>
+                            <p className="en-ter wei-900 usedwatts-capital">
+                                Average wattage of your capital city is: <span>{capitalAverages}kW</span>
+                            </p>
                         </>
                     ) : (
                         <div className="section-fixed-details">
