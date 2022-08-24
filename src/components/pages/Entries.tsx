@@ -130,13 +130,6 @@ const Entries = () => {
             dispatch(setLoading(true));
             const { email, name, username, password } = registerForm;
 
-            // bread.post('/회원가입', {
-            //     email,
-            //     username,
-            //     password,
-            //     cfmpassword,
-            // });
-
             bread
                 .post('users/join', {
                     email,
@@ -145,23 +138,27 @@ const Entries = () => {
                     password,
                 })
                 .then((res) => {
-                    if (res) {
-                        dispatch(
-                            setPopup(
-                                true,
-                                'positive',
-                                'Succeed to create a new account!',
-                                false,
-                                'Confirm',
-                                'Cancel',
-                                () => {
-                                    {
-                                        //                 // console.log('컨피름 클릭드');
+                    if (res.data) {
+                        if (res.data.message === '회원가입에 성공했습니다!') {
+                            dispatch(
+                                setPopup(
+                                    true,
+                                    'positive',
+                                    'Succeed to create a new account!',
+                                    false,
+                                    'Confirm',
+                                    'Cancel',
+                                    () => {
+                                        {
+                                            //                 // console.log('컨피름 클릭드');
+                                        }
                                     }
-                                }
-                            )
-                        );
-                        setCurrentPage('login');
+                                )
+                            );
+                            setCurrentPage('login');
+                        } else {
+                            dispatch(setToastMessage('The form does not satisfying our validation.'));
+                        }
                     }
                 })
                 .catch((error: AxiosError) => {

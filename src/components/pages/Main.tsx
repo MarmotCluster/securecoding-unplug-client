@@ -44,11 +44,14 @@ const Main = () => {
     }, [currentItemSelected]);
 
     useEffect(() => {
-        bread.post('users/get_user_info').then((res) => {
-            if (res.data) {
-                setUsername(res.data.name);
-            }
-        });
+        bread
+            .post('users/get_user_info')
+            .then((res) => {
+                if (res.data) {
+                    setUsername(res.data.name);
+                }
+            })
+            .catch((err) => {});
 
         bread
             .get('/electricities/device_data')
@@ -66,6 +69,7 @@ const Main = () => {
                 dispatch(setCurrentSelectedItem(resultItems[0])); // 이니셜 useeffect로 전달이 되지않아 response를 받으면 바로 dispatch
                 setItems([...resultItems]);
             })
+            .catch((err) => {})
             .finally(() => {
                 setIsLoadingItems(false);
             });

@@ -23,10 +23,15 @@ bread.interceptors.response.use(
         store.dispatch(setToastMessage(err.message));
         store.dispatch(setLoading(false));
 
-        if (err.response.data.message === '토큰이 유효하지 않습니다.') {
-            store.dispatch(setForceLogout(true));
+        if (err.response.data) {
+            if (
+                err.response.data.message === '토큰이 존재하지 않습니다.' ||
+                err.response.data.message === '토큰이 유효하지 않습니다.'
+            ) {
+                store.dispatch(setForceLogout(true));
+            }
+            return Promise.reject(err);
         }
-        return Promise.reject(err);
     }
 );
 

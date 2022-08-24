@@ -76,11 +76,14 @@ const Settings = () => {
     }, [settingsValids, dispatch, navigate]);
 
     useEffect(() => {
-        bread.post('users/get_user_info').then((res) => {
-            if (res.data) {
-                setUsername(res.data.name);
-            }
-        });
+        bread
+            .post('users/get_user_info')
+            .then((res) => {
+                if (res.data) {
+                    setUsername(res.data.name);
+                }
+            })
+            .catch((err) => {});
     }, []);
 
     return (
@@ -173,9 +176,10 @@ const Settings = () => {
                                     async () => {
                                         dispatch(setLoading(true));
                                         try {
-                                            const res = await bread.delete('/user/withdraw');
+                                            const res = await bread.delete('/users/user_delete');
 
                                             if (res.data) {
+                                                console.log(res.data);
                                                 window.localStorage.removeItem('auth');
                                                 Object(bread.defaults.headers).Authorization = '';
                                                 dispatch(setLoginStatus(false));
