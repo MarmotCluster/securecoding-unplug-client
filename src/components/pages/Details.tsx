@@ -70,7 +70,7 @@ const Details = () => {
 
                 if (res.data) {
                     const getAverageOfMine = (arr: periodAverageProps[]): number => {
-                        console.log(arr);
+                        // console.log(arr);
 
                         let totals: number = 0;
                         let counts: number = 0;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setLoading, setLoginStatus, setPopup } from '../../modules/defaults';
+import { setLoading, setLoginStatus, setPopup, setPopupOff } from '../../modules/defaults';
 import Header from '../layouts/Header';
 import RoundyInput from '../layouts/RoundyInput';
 import forms from '../../assets/json/forms.json';
@@ -152,6 +152,44 @@ const Settings = () => {
                         }}
                     >
                         LOG OUT
+                    </span>
+                </p>
+                <p
+                    className="en-pri wei-100 nodrag"
+                    style={{ fontSize: '1.6rem', paddingTop: '1.5rem', textDecoration: 'underline' }}
+                >
+                    <span
+                        className="pointer"
+                        onClick={() =>
+                            dispatch(
+                                setPopup(
+                                    true,
+                                    'negative',
+                                    `This process cannot be undone.
+                                    Tap continue when you sure.`,
+                                    true,
+                                    'Continue',
+                                    'Cancel',
+                                    async () => {
+                                        dispatch(setLoading(true));
+                                        try {
+                                            const res = await bread.delete('/user/withdraw');
+
+                                            if (res.data) {
+                                                window.localStorage.removeItem('auth');
+                                                Object(bread.defaults.headers).Authorization = '';
+                                                dispatch(setLoginStatus(false));
+                                                navigate('/');
+                                            }
+                                        } catch (err) {
+                                            dispatch(setPopupOff());
+                                        }
+                                    }
+                                )
+                            )
+                        }
+                    >
+                        I no longer want to use UnPlug.
                     </span>
                 </p>
             </main>

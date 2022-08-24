@@ -77,7 +77,7 @@ const Main = () => {
                 bread.get('/electricities/kwatt_level').then((res2) => {
                     let combined: BreadInfoList[] = [...items];
                     res2.data.forEach((i: number, index: number) => {
-                        const recalculated = 5 - i;
+                        const recalculated = i - 1;
                         combined[index].status = recalculated;
                     });
                     setItems([...combined]);
