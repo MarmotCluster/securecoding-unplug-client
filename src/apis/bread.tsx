@@ -5,7 +5,8 @@ import store from '../store';
 
 const bread = axios.create({
     // baseURL: 'http://localhost:8000',
-    baseURL: 'http://175.45.201.158:8000/',
+    // baseURL: 'http://175.45.201.158:8000/',
+    baseURL: 'http://54.173.171.170:8000/',
     withCredentials: true,
     headers: {
         'Content-Type': 'application/json',
