@@ -6,7 +6,7 @@ completed descriptions available here <a href="https://github.com/secure-unplug"
   <img src="https://user-images.githubusercontent.com/87087163/182898362-d77a13ae-abd0-458b-9d04-df7fa810c112.png" width="50%">
 </p>
 
-<p align="center">A project aimed at saving energy for the 🌎 Earth by reducing power consumption.</p>
+<p align="center">Save energy for the 🌎 Earth by reducing power consumption.</p>
 
 ## preview
 
